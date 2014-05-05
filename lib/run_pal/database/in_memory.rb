@@ -31,7 +31,7 @@ module RunPal
       def circles_filter_location(location)
       end
 
-      def update_circle(id)
+      def update_circle(id, updates)
       end
 
       def create_commitment(attrs)
@@ -43,7 +43,7 @@ module RunPal
       def get_user_commitments(user_id)
       end
 
-      def update_commitment(id)
+      def update_commitment(id, updates)
       end
 
       def create_post(attrs)
@@ -64,7 +64,7 @@ module RunPal
       def get_attendees(post_id)
       end
 
-      def update_post(id)
+      def update_post(id, updates)
       end
 
       def delete_old_posts
@@ -94,7 +94,7 @@ module RunPal
       def all_users
       end
 
-      def update_user(attrs)
+      def update_user(id, attrs)
       end
 
       def create_wallet(attrs)

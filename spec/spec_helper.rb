@@ -1,4 +1,5 @@
 require 'timecop'
+require 'geocoder'
 require_relative '../lib/app_helper.rb'
 require_relative 'database/shared/database_spec.rb'
 

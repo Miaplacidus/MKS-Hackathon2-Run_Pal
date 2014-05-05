@@ -4,6 +4,7 @@ module RunPal
     attr_accessor :age_pref, :gender_pref, :committer_ids, :attend_ids, :circle_id
     # committer_ids: array
     # attend_ids: array
+    #location: {lat: number, long: number}
   end
 end
 
