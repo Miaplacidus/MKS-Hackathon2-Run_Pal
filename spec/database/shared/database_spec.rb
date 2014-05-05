@@ -2,18 +2,37 @@
 shared_examples 'a database' do
   let(:db) { described_class.new}
 
-  before {db.clear_everything}
+  before :each do
+    db.clear_everything
+  end
 
 # USER TESTS
   describe 'Users' do
     it "creates a user" do
-
+      user = RunPal::User.new({username: "Fast Feet", gender: 1, email:"marathons@speed.com", password:"abc123", age:"25"})
+      expect(user.username).to eq("Fast Feet")
+      expect(user.gender).to eq(1)
+      expect(user.password).to eq("abc123")
     end
 
     it "gets a user" do
+      user = db.create_user :username => 'Jon Jones'  gender: 0, age: 26
+      retrieved_user = db.get_user(user.id)
+      expect(retrieved_user.username).to eq('Jon Jones')
+      expect(retrieved_user.gender).to eq(0)
+      expect(retrieved_user.age).to eq(26)
     end
 
     it "gets all users" do
+      %w{Alice Bob}.each {|name| db.create_user :name => name }
+      expect(db.all_users.count).to eq 2
+      expect(db.all_users.map &:name).to include('Alice', 'Bob')
+    end
+
+    it "updates user information" do
+      user = db.create_user({username:"Isaac Newton", email: "apple@ouch.com", age:21})
+      user.update_user({email:"genius@physics.com"})
+      expect(db.all_users.count).to eq 2
     end
 
   end
@@ -21,9 +40,17 @@ shared_examples 'a database' do
 # POST TESTS
   describe 'Posts' do
     it "creates a post" do
+      user = db.create_user({username:"Runna Lot"})
+      post = RunPal::Post.new(creator_id: user.id, time: Time.now, pace: 3, min_amt: 10)
+      expect((db.get_user(post.creator_id)).username).to eq("Runna Lot")
+      expect(post.time).to eq(Time.now)
+      expect(post.pace).to eq(3)
+      expect(post.min_amt).to eq(10)
     end
 
     it "creates a post associated with a circle" do
+      circle = RunPal::Circle.new(name:"MakerSquare", max_members: 23)
+      post = RunPal::Post.new(:creator_id: 1, circle_id: circle.id)
     end
 
     it "gets a post" do
@@ -93,7 +120,6 @@ shared_examples 'a database' do
 
     it "gets a wallet" do
     end
-
   end
 
 end

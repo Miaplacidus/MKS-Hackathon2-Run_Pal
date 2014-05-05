@@ -88,7 +88,7 @@ module RunPal
       def all_users
       end
 
-      def update_user
+      def update_user(attrs)
       end
 
       def create_wallet(attrs)
