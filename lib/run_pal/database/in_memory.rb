@@ -58,6 +58,12 @@ module RunPal
       def all_posts(attrs)
       end
 
+      def get_committed_users(post_id)
+      end
+
+      def get_attendees(post_id)
+      end
+
       def update_post(id)
       end
 
