@@ -1,4 +1,4 @@
-module Timeline
+module RunPal
   class Entity
     include ActiveModel::Validations
 

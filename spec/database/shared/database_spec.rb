@@ -1,4 +1,3 @@
-require 'spec_helper'
 
 shared_examples 'a database' do
   let(:db) { described_class.new}
@@ -8,6 +7,7 @@ shared_examples 'a database' do
 # USER TESTS
   describe 'Users' do
     it "creates a user" do
+
     end
 
     it "gets a user" do
