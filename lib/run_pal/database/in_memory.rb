@@ -13,7 +13,7 @@ module RunPal
         @post_id_counter = 0
         @user_id_counter = 0
         @wallet_id_counter = 0
-        @challengers = {} #Key: challenge_id, Value: challenge_obj
+        @challenges = {} #Key: challenge_id, Value: challenge_obj
         @circles = {} # Key: circle_id, Value: circle_obj
         @commitments = {} # Key: user_id, Value: commitment_obj
         @posts = {} # Key: user_id, Value: post_obj
@@ -22,7 +22,8 @@ module RunPal
       end
 
       def create_challenge(attrs)
-        challenge = RunPal::Challenge.new({name: attrs[:name], sender_id: attrs[:sender_id], recipient_id: attrs[:recipient_id] {creator_id: @user_objs[0].id, time: Time.now, location:[22, 33], pace: 2, notes:"Sunny day run!", complete:false, min_amt:10.50, age_pref: 0, gender_pref: 0, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil},})
+        post = RunPal::Post.new({creator_id: attrs[:creator_id], time: attrs[:time], location: attrs[:location], pace: attrs[:pace], notes: attrs[:notes], age_pref: 0, gender_pref: 0, circle_id: attrs[:circle_id], min_amt: 0, committer_ids: []})
+        challenge = RunPal::Challenge.new(name: attrs[:name], sender_id:attrs[], recipient_id: attrs[:recipient_id], post_id: attrs[:post_id])
       end
 
       def get_challenge(id)
@@ -101,15 +102,26 @@ module RunPal
       end
 
       def create_user(attrs)
+        id = @user_id_counter+=1
+        attrs[:id] = id
+        RunPal::User.new(attrs).tap{|user| @users[id] = user}
       end
 
       def get_user(id)
+        @users[id]
       end
 
       def all_users
+        @users.values
       end
 
       def update_user(id, attrs)
+        if @users[id]
+          attrs.each do |key, value|
+            setter = "#{key}="
+            @users[id].send(setter, value) if self.class.method_defined?(setter)
+          end
+        end
       end
 
       def create_wallet(attrs)
