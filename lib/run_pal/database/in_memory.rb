@@ -34,16 +34,16 @@ module RunPal
       def update_circle(id, updates)
       end
 
-      def create_commitment(attrs)
+      def create_commit(attrs)
       end
 
-      def get_commitment(id)
+      def get_commit(id)
       end
 
-      def get_user_commitments(user_id)
+      def get_user_commit(user_id)
       end
 
-      def update_commitment(id, updates)
+      def update_commit(id, updates)
       end
 
       def create_post(attrs)
@@ -103,7 +103,7 @@ module RunPal
       def get_wallet(id)
       end
 
-      def get_wallet_by_user(user_id)
+      def get_user_wallet(user_id)
       end
 
       def update_wallet(user_id)

@@ -5,6 +5,16 @@ module RunPal
     # committer_ids: array
     # attend_ids: array
     #location: {lat: number, long: number}
+    validates_presence_of :creator_id, :time, :location, :pace, :min_amt
+    validates_presence_of :age_pref, :gender_pref, :committer_ids
+
+    def initialize(attrs={})
+      @notes = ""
+      @circle_id = nil
+      @complete = false
+      @attend_ids = []
+      super
+    end
   end
 end
 

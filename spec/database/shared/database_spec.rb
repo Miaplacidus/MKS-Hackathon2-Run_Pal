@@ -11,10 +11,10 @@ shared_examples 'a database' do
 
     before :each do
         users = [
-            {username: "Fast Feet", gender: 0, email:"marathons@speed.com", password:"abc123", bday:"2/8/1987"},
-            {username: "Runna Lot", gender: 1, email:"jogger@run.com", password:"111222", bday:"6/6/1966"},
-            {username: "Jon Jones", gender: 1, email:"runlikemad@sprinter.com", password:"aabbcc", bday:"3/14/1988"},
-            {username: "Nee Upp", gender: 0, email:"sofast@runna.com", password: "123abc", bday: "5/15/1994"}
+            {username: "Fast Feet", gender: 1, email:"marathons@speed.com", password:"abc123", bday:"2/8/1987"},
+            {username: "Runna Lot", gender: 2, email:"jogger@run.com", password:"111222", bday:"6/6/1966"},
+            {username: "Jon Jones", gender: 2, email:"runlikemad@sprinter.com", password:"aabbcc", bday:"3/14/1988"},
+            {username: "Nee Upp", gender: 1, email:"sofast@runna.com", password: "123abc", bday: "5/15/1994"}
         ]
         @user_objs = []
         users.each do |info|
@@ -54,6 +54,8 @@ shared_examples 'a database' do
       user = @user_objs[2]
       user = db.update_user(user.id, {email:"awesome@running.net"})
       expect(user.email).to eq("awesome@running.net")
+      user = db.update_user(user.id, {username: "Wiz Khalifa"})
+      expect(user.username).to eq("Wiz Khalifa")
     end
 
   end
@@ -61,99 +63,113 @@ shared_examples 'a database' do
 # POST TESTS
   describe 'Posts' do
     before :each do
-      db.create_post({})
+      users = [
+          {username: "Fast Feet", gender: 1, email:"marathons@speed.com", password:"abc123", bday:"2/8/1987"},
+          {username: "Runna Lot", gender: 2, email:"jogger@run.com", password:"111222", bday:"6/6/1966"},
+          {username: "Jon Jones", gender: 2, email:"runlikemad@sprinter.com", password:"aabbcc", bday:"3/14/1988"},
+          {username: "Nee Upp", gender: 1, email:"sofast@runna.com", password: "123abc", bday: "5/15/1994"}
+      ]
+      @user_objs = []
+      users.each do |info|
+          @user_objs << db.create_user(info)
+      end
+
+      @circle = db.create_circle({name: "MakerSquare", admin_id: @user_objs[0].id, max_members: 30})
+
+      posts = [
+        {creator_id: @user_objs[0].id, time: Time.now, location:[22, 33], pace: 2, notes:"Sunny day run!", complete:false, min_amt:10.50, age_pref: 0, gender_pref: 0, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil},
+        {creator_id: @user_objs[1].id, time: Time.now, location:[44, 55], pace: 1, notes:"Let's go.", complete:false, min_amt:5.50, age_pref: 3, gender_pref: 1, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil},
+        {creator_id: @user_objs[2].id, time: Time.now, location:[66, 77], pace: 7, notes:"Will be a fairly relaxed jog.", complete:true, min_amt:12.00, age_pref: 3, gender_pref: 1, committer_ids: [@user_objs[0].id, @user_objs[1].id], attend_ids: [@user_objs[0].id, @user_objs[1].id], circle_id: nil},
+        {creator_id: @user_objs[3].id, time: Time.now, location:[88, 99], pace: 0, complete:false, min_amt:20.00, age_pref: 4, gender_pref: 0, committer_ids: [@user_objs[0].id, @user_objs[1].id, @user_objs[2].id, @user_objs[3].id], attend_ids: [@user_objs[1].id, @user_objs[3].id], circle_id: @circle.id},
+      ]
+
+      @post_objs = []
+      posts.each do |info|
+        @post_objs << db.create_post(info)
+      end
+
     end
 
-    xit "creates a post" do
-      user = db.create_user({username:"Runna Lot"})
-      post = db.create_post({creator_id: user.id, time: Time.now, pace: 3, min_amt: 10, complete: false, circle_id: nil})
-      expect((db.get_user(post.creator_id)).username).to eq("Runna Lot")
-      # expect(post.time).to eq(Time.now)
-      expect(post.pace).to eq(3)
-      expect(post.min_amt).to eq(10)
+    it "creates a post" do
+      post = @post_objs[0]
+      expect((db.get_user(post.creator_id)).username).to eq("Fast Feet")
+      # expect(post.time).to eq()
+      expect(post.pace).to eq(2)
+      expect(post.min_amt).to eq(10.50)
       expect(post.complete).to eq(false)
       expect(post.circle_id).to eq(nil)
     end
 
-    xit "will not create a post without requisite information" do
-
+    it "will not create a post without requisite information" do
+      # required: all attributes except note
+      post = db.create_post({username:"Jane Doe"})
+      expect(post).to eq(nil)
     end
 
-    xit "creates a post associated with a circle" do
-      circle = db.create_circle({name: "MakerSquare", max_members: 23})
-      post = db.create_post(creator_id: 1, circle_id: circle.id)
-      expect((db.get_circle(post.circle_id)).name).to eq("MakerSquare")
-      expect((db.get_circle(post.circle_id)).max_members).to eq(23)
+    it "creates a post associated with a circle" do
+      post = @post_objs[3]
+      circleID = post.circle_id
+      expect((db.get_circle(circleID)).name).to eq("MakerSquare")
+      expect((db.get_circle(circleID)).max_members).to eq(30)
     end
 
-    xit "gets a post" do
-      user = db.create_user({username: "Usain Bolt"})
-      post = db.create_post({creator_id: user.id, notes: "What a sunny day!", gender_pref: 1, age_pref: 4})
+    it "gets a post" do
+      post = @post_objs[2]
       result = db.get_post(post.id)
-      expect(result.notes).to eq("What a sunny day!")
+      expect(result.notes).to eq("Will be a fairly relaxed jog")
       expect(result.gender_pref).to eq(1)
-      expect(result.age_pref).to eq(4)
+      expect(result.age_pref).to eq(3)
+      expect(result.min_amt).to eq(12.00)
     end
 
-    xit "gets all people committed to a run" do
-      committers = [(db.create_user({username:"Joan"})).id, (db.create_user({username:"Jane"})).id, (db.create_user({username:"Janet"})).id]
-      post = db.create_post({creator_id: committers[0].id, pace:6, committer_ids: committers})
-      result = db.get_committed_users(post.id)
-      result.count.should eql(3)
-      result[1].username.should eql("Jane")
-      result[2].username.should eql("Janet")
+    it "gets all people committed to a run" do
+      post = @post_objs[2]
+      committers = db.get_committed_users(post.id)
+      expect(committers.count).to eq(2)
+      expect(committers[1].username).to eq("Runna Lot")
     end
 
-    xit "gets all people who have attended a run" do
-      attendees = [(db.create_user({username:"Mike"})).id, (db.create_user({username:"Moe"})).id, (db.create_user({username:"Marty"})).id]
-      post = db.create_post({creator_id: attendees[0].id, pace:3, attend_ids: attendees})
-      result db.get_attendees(post.id)
-      result[1].username.should eql("Moe")
-      result[2].username.should eql("Marty")
+    it "gets all people who have attended a run" do
+      post = @post_objs[3]
+      attendees = db.get_attendees(post.id)
+      expect(attendees.count).to eq(2)
+      expect(attendees[1].username).to eq("Nee Upp")
     end
 
-    xit "gets all posts" do
-        %w{Chicago Austin NYC}.each {|location| db.create_user :location => location }
-        result = db.all_posts
-        result.count.should eql(3)
-        expect(db.all_users.map &:location).to include('A', 'Bob', "NYC")
+    it "gets all posts" do
+      result = db.all_posts
+      result.count.should eql(4)
+      expect(result.map &:gender_pref).to include(0, 1)
     end
 
-    xit "deletes old posts" do
-      post = %w{Dallas Springfield Austin}.each do |location|
-        db.create_user :location => location
-      end.last
-      post_id = post.id
+    it "deletes posts" do
+      post = @post_objs[1]
       db.delete_post(post.id)
       expect(db.get_post(post.id)).to eq(nil)
     end
 
-    xit "filters posts by age preference" do
-      %w{0 3 6 3 4}.each {|age| db.create_post :age_pref => age }
+    it "filters posts by age preference" do
       result = db.posts_filter_age(3)
       result.count.should eql(2)
       result[1].age_pref.should eql(3)
     end
 
-    xit "filters posts by gender preference" do
-      %w{0 2 0 1 0}.each {|gender| db.create_post :gender_pref => gender }
+    it "filters posts by gender preference" do
       result = db.posts_filter_gender(0)
-      result.count.should eql(3)
+      result.count.should eql(2)
       result[1].gender_pref.should eql(0)
     end
 
     xit "filters posts by location" do
-      %w{Chicago Austin Austin Dallas}.each {|location| db.create_post :location => location }
-      result = db.posts_filter_location("Austin")
-      result.count.should eql(2)
+      result = db.posts_filter_location([44, 55])
+      result.count.should eql(1)
       result[1].location.should eql("Austin")
     end
 
-    xit "filters posts by pace" do
-      %w{2 6 2 5 2 2}.each {|pace| db.create_post :pace => pace }
-      result = db.posts_filter_pace()
-      result.count.should eql(2)
-      result[1].location.should eql("Austin")
+    it "filters posts by pace" do
+      result = db.posts_filter_pace(2)
+      result.count.should eql(1)
+      result[1].notes.should eql("Sunny day run!")
     end
 
     xit "filters posts by time" do
@@ -163,48 +179,109 @@ shared_examples 'a database' do
 
 # COMMITMENT TESTS
   describe 'Commitments' do
-
     before :each do
-      @user1 = db.create_user({})
-      @post = db.create_post()
+      users = [
+          {username: "Fast Feet", gender: 1, email:"marathons@speed.com", password:"abc123", bday:"2/8/1987"},
+          {username: "Runna Lot", gender: 2, email:"jogger@run.com", password:"111222", bday:"6/6/1966"}
+      ]
+      @user_objs = []
+      users.each do |info|
+          @user_objs << db.create_user(info)
+      end
+
+      posts = [
+        {creator_id: @user_objs[0].id, time: Time.now, location:[22, 33], pace: 2, notes:"Sunny day run!", complete:false, min_amt:10.50, age_pref: 0, gender_pref: 0, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil},
+        {creator_id: @user_objs[1].id, time: Time.now, location:[44, 55], pace: 1, notes:"Let's go.", complete:false, min_amt:5.50, age_pref: 3, gender_pref: 1, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil}
+      ]
+
+      @post_objs = []
+      posts.each do |info|
+        @post_objs << db.create_post(info)
+      end
+
+      @commit1 = db.create_commit({user_id: @user_objs[0].id, post_id: @post_objs[0].id, amount: 3})
+      @commit2 = db.create_commit({user_id: @user_objs[1].id, post_id: @post_objs[1].id, amount: 5, fulfilled: true})
     end
 
     it "creates a commitment with fulfilled set to false" do
-      commit = db.create_commitment({user_id: 1, post_id: @post.id, amount: 5.50})
-      expect(commit.user_id).to eq(1)
-      expect(commit.post_id).to eq(3)
-      expect(commit.amount).to eq(5.50)
+      expect(db.get_user(@commit1.user_id).username).to eq("Fast Feet")
+      expect(db.get_post(@commit1.post_id).pace).to eq(2)
+      expect(commit.fulfilled).to eq(false)
       # call .last on the end keyword
     end
 
-    it "will not create a commitment without an amount and existing user and post ids" do
-      commit = db.create_commitment({user_id: 1})
+    it "will not create a commitment without an amount and user and post ids" do
+      commit = db.create_commitment({})
       expect(commit).to eq(nil)
-      commit2 = db.create_commitment({user_id: 1, post_id: 1, amount: 20})
+      commit2 = db.create_commitment({post_id: 1, amount: 20})
       expect(commit2).to eq(nil)
     end
 
     it "gets a commitment" do
-
+      commit = db.get_commit(@commit1.id)
+      expect(commit.amount).to eq(3)
     end
 
     it "gets commitments by user_id" do
-
+      commits_arr = db.get_user_commit(@user_objs[1].id)
+      expect(commits_arr.count).to eq(1)
+      expect(commits_arr[0].fulfilled).to eq(true)
+      expect(commits_arr[0].amount).to eq(5)
     end
   end
 
 # CIRCLE TESTS
   describe 'Circles' do
+
+    before :each do
+      users = [
+        {username: "Fast Feet", gender: 1, email:"marathons@speed.com", password:"abc123", bday:"2/8/1987"},
+        {username: "Runna Lot", gender: 2, email:"jogger@run.com", password:"111222", bday:"6/6/1966"},
+        {username: "Jon Jones", gender: 2, email:"runlikemad@sprinter.com", password:"aabbcc", bday:"3/14/1988"},
+        {username: "Nee Upp", gender: 1, email:"sofast@runna.com", password: "123abc", bday: "5/15/1994"}
+      ]
+
+    @user_objs = []
+    users.each do |info|
+        @user_objs << db.create_user(info)
+    end
+
+    @circle1 = db.create_circle({name: "Silvercar", admin_id: @user_objs[1].id, max_members: 14, location:[32, 44]})
+    @circle2 = db.create_circle({name: "Crazy Apps", admin_id: @user_objs[2].id, max_members: 19, location: [22, 67]})
+
+    posts = [
+      {creator_id: @user_objs[0].id, time: Time.now, location:[22, 33], pace: 2, notes:"Sunny day run!", complete:false, min_amt:10.50, age_pref: 0, gender_pref: 0, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil},
+      {creator_id: @user_objs[1].id, time: Time.now, location:[44, 55], pace: 1, notes:"Let's go.", complete:false, min_amt:5.50, age_pref: 3, gender_pref: 1, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil},
+      {creator_id: @user_objs[2].id, time: Time.now, location:[66, 77], pace: 7, notes:"Will be a fairly relaxed jog.", complete:true, min_amt:12.00, age_pref: 3, gender_pref: 1, committer_ids: [@user_objs[0].id, @user_objs[1].id], attend_ids: [@user_objs[0].id, @user_objs[1].id], circle_id: nil},
+      {creator_id: @user_objs[3].id, time: Time.now, location:[88, 99], pace: 0, complete:false, min_amt:20.00, age_pref: 4, gender_pref: 0, committer_ids: [@user_objs[0].id, @user_objs[1].id, @user_objs[2].id, @user_objs[3].id], attend_ids: [@user_objs[1].id, @user_objs[3].id], circle_id: @circle.id},
+    ]
+
+    @post_objs = []
+    posts.each do |info|
+      @post_objs << db.create_post(info)
+    end
+
+  end
+
     it "creates a circle" do
+      expect(@circle1.name).to eq("Silvercar")
+      expect(@circle1.max_members).to eq(14)
+      expect(db.get_user(@circle1.admin_id).username).to eq("Runna Lot")
     end
 
     it "gets a circle" do
+      circle = db.get_circle(@circle2.id)
+      expect(circle.name).to eq("Crazy Apps")
     end
 
     it "gets all circles" do
+      circles = db.all_circles
+      expect(circles.count).to eq(2)
+      expect(circles.map &:max_number).to include(14, 19)
     end
 
-    it "filters circles by location" do
+    xit "filters circles by location" do
+
     end
 
     it "filters out full circles" do
@@ -213,10 +290,20 @@ shared_examples 'a database' do
 
 # WALLET TESTS
   describe 'Wallets' do
+
+    before :each do
+        @user = db.create_user({username: "Usain Bolt", gender: 2, email:"usain@sprinter.com", password:"ababab", bday:"2/21/1985"})
+    end
+
     it "creates a wallet" do
+        wallet = db.create_wallet({user_id: @user.id})
+        expect(db.get_user(wallet.user_id).username).to eq("Usain Bolt")
     end
 
     it "gets a wallet" do
+        wallet = db.create_wallet({user_id: @user.id, balance: 20.00})
+        result = db.get_wallet(wallet.id)
+        expect(result.balance).to eq(20.00)
     end
   end
 
