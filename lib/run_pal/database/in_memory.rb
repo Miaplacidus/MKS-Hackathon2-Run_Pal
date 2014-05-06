@@ -22,8 +22,8 @@ module RunPal
       end
 
       def create_challenge(attrs)
-        post = RunPal::Post.new({creator_id: attrs[:creator_id], time: attrs[:time], location: attrs[:location], pace: attrs[:pace], notes: attrs[:notes], age_pref: 0, gender_pref: 0, circle_id: attrs[:circle_id], min_amt: 0, committer_ids: []})
-        challenge = RunPal::Challenge.new(name: attrs[:name], sender_id:attrs[], recipient_id: attrs[:recipient_id], post_id: attrs[:post_id])
+        # post = RunPal::Post.new({creator_id: attrs[:creator_id], time: attrs[:time], location: attrs[:location], pace: attrs[:pace], notes: attrs[:notes], age_pref: 0, gender_pref: 0, circle_id: attrs[:circle_id], min_amt: 0, committer_ids: []})
+        # challenge = RunPal::Challenge.new(name: attrs[:name], sender_id:attrs[], recipient_id: attrs[:recipient_id], post_id: attrs[:post_id])
       end
 
       def get_challenge(id)
@@ -33,12 +33,17 @@ module RunPal
       end
 
       def create_circle(attrs)
+        id = @circle_id_counter+=1
+        attrs[:id] = id
+        RunPal::Circle.new(attrs).tap{|circle| @circles[id] = circle}
       end
 
       def get_circle(id)
+        @circles[id]
       end
 
       def all_circles
+        @circles.values
       end
 
       def circles_filter_location(location)
@@ -47,10 +52,18 @@ module RunPal
       def circles_filter_full
       end
 
-      def update_circle(id, updates)
+      def update_circle(id, attrs)
+        if @circles[id]
+          attrs.each do |key, value|
+            setter = "#{key}="
+            @circles[id].send(setter, value) if @circles[id].class.method_defined?(setter)
+          end
+        end
+        @circles[id]
       end
 
       def create_commit(attrs)
+
       end
 
       def get_commit(id)
@@ -63,6 +76,9 @@ module RunPal
       end
 
       def create_post(attrs)
+        id = @post_id_counter+=1
+        attrs[:id] = id
+        RunPal::Post.new(attrs).tap{|post| @posts[id] = post}
       end
 
       def create_circle_post(circle_id)
@@ -119,12 +135,20 @@ module RunPal
         if @users[id]
           attrs.each do |key, value|
             setter = "#{key}="
-            @users[id].send(setter, value) if self.class.method_defined?(setter)
+            @users[id].send(setter, value) if @users[id].class.method_defined?(setter)
           end
         end
+        @users[id]
+      end
+
+      def delete_user(id)
+        @users.delete(id)
       end
 
       def create_wallet(attrs)
+        id = @wallet_id_counter+=1
+        attrs[:id] = id
+        RunPal::Wallet.new(attrs).tap{|wallet| @wallets[id] = wallet}
       end
 
       def get_wallet(id)
@@ -133,7 +157,14 @@ module RunPal
       def get_user_wallet(user_id)
       end
 
-      def update_wallet(user_id)
+      def update_wallet(user_id, attrs)
+         if @wallets[id]
+          attrs.each do |key, value|
+            setter = "#{key}="
+            @wallets[id].send(setter, value) if @wallets[id].class.method_defined?(setter)
+          end
+        end
+        @wallets[id]
       end
 
       def delete_wallet(id)

@@ -54,6 +54,12 @@ shared_examples 'a database' do
       expect(user.username).to eq("Wiz Khalifa")
     end
 
+    it "deletes a user" do
+      user = @user_objs[1]
+      db.delete_user(user.id)
+      expect(db.get_user(user.id)).to eq nil
+    end
+
   end
 
 # POST TESTS
@@ -86,7 +92,7 @@ shared_examples 'a database' do
 
     end
 
-    xit "creates a post" do
+    it "creates a post" do
       post = @post_objs[0]
       expect((db.get_user(post.creator_id)).username).to eq("Fast Feet")
       # expect(post.time).to eq()
@@ -264,7 +270,7 @@ shared_examples 'a database' do
       {creator_id: @user_objs[0].id, time: Time.now, location:[22, 33], pace: 2, notes:"Sunny day run!", complete:false, min_amt:10.50, age_pref: 0, gender_pref: 0, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil},
       {creator_id: @user_objs[1].id, time: Time.now, location:[44, 55], pace: 1, notes:"Let's go.", complete:false, min_amt:5.50, age_pref: 3, gender_pref: 1, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil},
       {creator_id: @user_objs[2].id, time: Time.now, location:[66, 77], pace: 7, notes:"Will be a fairly relaxed jog.", complete:true, min_amt:12.00, age_pref: 3, gender_pref: 1, committer_ids: [@user_objs[0].id, @user_objs[1].id], attend_ids: [@user_objs[0].id, @user_objs[1].id], circle_id: nil},
-      {creator_id: @user_objs[3].id, time: Time.now, location:[88, 99], pace: 0, complete:false, min_amt:20.00, age_pref: 4, gender_pref: 0, committer_ids: [@user_objs[0].id, @user_objs[1].id, @user_objs[2].id, @user_objs[3].id], attend_ids: [@user_objs[1].id, @user_objs[3].id], circle_id: @circle.id},
+      {creator_id: @user_objs[3].id, time: Time.now, location:[88, 99], pace: 0, complete:false, min_amt:20.00, age_pref: 4, gender_pref: 0, committer_ids: [@user_objs[0].id, @user_objs[1].id, @user_objs[2].id, @user_objs[3].id], attend_ids: [@user_objs[1].id, @user_objs[3].id], circle_id: @circle1.id},
     ]
 
     @post_objs = []
@@ -274,33 +280,35 @@ shared_examples 'a database' do
 
   end
 
-    xit "creates a circle" do
+    it "creates a circle" do
       expect(@circle1.name).to eq("Silvercar")
       expect(@circle1.max_members).to eq(14)
       expect(db.get_user(@circle1.admin_id).username).to eq("Runna Lot")
     end
 
-    xit "gets a circle" do
+    it "gets a circle" do
       circle = db.get_circle(@circle2.id)
       expect(circle.name).to eq("Crazy Apps")
     end
 
-    xit "gets all circles" do
+    it "gets all circles" do
       circles = db.all_circles
       expect(circles.count).to eq(2)
-      expect(circles.map &:max_number).to include(14, 19)
+      expect(circles.map &:max_members).to include(14, 19)
     end
 
     xit "filters circles by location and search radius" do
     end
 
-    xit "updates a circle" do
+    it "updates a circle" do
+      updated = db.update_circle(@circle1.id, {name:"Runner's World", max_members: 35})
+      expect(updated.name).to eq("Runner's World")
+      expect(updated.max_members).to eq(35)
     end
 
     xit "filters out full circles" do
       full_circle = db.create_circle({name: "ATX Runners", admin_id: @user_objs[1].id, max_members: 3, location:[32, 44]})
       result = db.circles_filter_full
-
     end
   end
 
@@ -309,21 +317,22 @@ shared_examples 'a database' do
 
     before :each do
         @user = db.create_user({username: "Usain Bolt", gender: 2, email:"usain@sprinter.com", password:"ababab", bday:"2/21/1985"})
+        @wallet = db.create_wallet({user_id: @user.id, balance: 20.00})
     end
 
-    xit "creates a wallet" do
-        wallet = db.create_wallet({user_id: @user.id})
-        expect(db.get_user(wallet.user_id).username).to eq("Usain Bolt")
+    it "creates a wallet" do
+        expect(db.get_user(@wallet.user_id).username).to eq("Usain Bolt")
     end
 
     xit "gets a wallet" do
-        wallet = db.create_wallet({user_id: @user.id, balance: 20.00})
-        result = db.get_wallet(wallet.id)
+        result = db.get_wallet(@wallet.id)
         expect(result.balance).to eq(20.00)
     end
 
-    xit "updates a wallet" do
-
+    it "updates a wallet" do
+      updated = db.update_wallet(@user.id, {balance: 30.00})
+      expect(db.get_user(updated.user_id).name).to eq("Usain Bolt")
+      expect(updated.balance).to eq(30.00)
     end
   end
 
