@@ -7,16 +7,28 @@ module RunPal
       end
 
       def clear_everything
+        @challenge_id_counter = 0
         @circle_id_counter = 0
         @commitment_id_counter = 0
         @post_id_counter = 0
         @user_id_counter = 0
         @wallet_id_counter = 0
+        @challengers = {} #Key: challenge_id, Value: challenge_obj
         @circles = {} # Key: circle_id, Value: circle_obj
         @commitments = {} # Key: user_id, Value: commitment_obj
         @posts = {} # Key: user_id, Value: post_obj
         @users = {} # Key: user_id, Value: user_obj
         @wallets = {} # Key: user_id, Value: wallet_obj
+      end
+
+      def create_challenge(attrs)
+        challenge = RunPal::Challenge.new({name: attrs[:name], sender_id: attrs[:sender_id], recipient_id: attrs[:recipient_id] {creator_id: @user_objs[0].id, time: Time.now, location:[22, 33], pace: 2, notes:"Sunny day run!", complete:false, min_amt:10.50, age_pref: 0, gender_pref: 0, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil},})
+      end
+
+      def get_challenge(id)
+      end
+
+      def update_challenge(attrs)
       end
 
       def create_circle(attrs)
@@ -29,6 +41,9 @@ module RunPal
       end
 
       def circles_filter_location(location)
+      end
+
+      def circles_filter_full
       end
 
       def update_circle(id, updates)

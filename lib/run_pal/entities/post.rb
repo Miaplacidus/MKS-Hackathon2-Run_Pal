@@ -4,7 +4,7 @@ module RunPal
     attr_accessor :age_pref, :gender_pref, :committer_ids, :attend_ids, :circle_id
     # committer_ids: array
     # attend_ids: array
-    #location: {lat: number, long: number}
+    #location: [lat: number, long: number]
     validates_presence_of :creator_id, :time, :location, :pace, :min_amt
     validates_presence_of :age_pref, :gender_pref, :committer_ids
 

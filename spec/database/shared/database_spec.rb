@@ -142,6 +142,16 @@ shared_examples 'a database' do
       expect(result.map &:gender_pref).to include(0, 1)
     end
 
+    it "updates posts" do
+      # UPDATE TIME AS WELL
+      post = @post_objs[1]
+      result = db.update_post(post.id, {age_pref: 4, pace: 3, attend_ids: [@user_objs[0].id, @user_objs[1].id]})
+      expect(result.age_pref).to eq(4)
+      expect(result.pace).to eq(3)
+      expect(result.attend_ids.count).to eq(2)
+      expect(result.attend_ids[0].username).to eq("Fast Feet")
+    end
+
     it "deletes posts" do
       post = @post_objs[1]
       db.delete_post(post.id)
@@ -160,7 +170,7 @@ shared_examples 'a database' do
       result[1].gender_pref.should eql(0)
     end
 
-    xit "filters posts by location" do
+    xit "filters posts by location and search radius" do
       result = db.posts_filter_location([44, 55])
       result.count.should eql(1)
       result[1].location.should eql("Austin")
@@ -228,6 +238,10 @@ shared_examples 'a database' do
       expect(commits_arr[0].fulfilled).to eq(true)
       expect(commits_arr[0].amount).to eq(5)
     end
+
+    it "updates a commitment" do
+
+    end
   end
 
 # CIRCLE TESTS
@@ -248,6 +262,7 @@ shared_examples 'a database' do
 
     @circle1 = db.create_circle({name: "Silvercar", admin_id: @user_objs[1].id, max_members: 14, location:[32, 44]})
     @circle2 = db.create_circle({name: "Crazy Apps", admin_id: @user_objs[2].id, max_members: 19, location: [22, 67]})
+
 
     posts = [
       {creator_id: @user_objs[0].id, time: Time.now, location:[22, 33], pace: 2, notes:"Sunny day run!", complete:false, min_amt:10.50, age_pref: 0, gender_pref: 0, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil},
@@ -280,11 +295,16 @@ shared_examples 'a database' do
       expect(circles.map &:max_number).to include(14, 19)
     end
 
-    xit "filters circles by location" do
-
+    xit "filters circles by location and search radius" do
     end
 
-    it "filters out full circles" do
+    it "updates a circle" do
+    end
+
+    xit "filters out full circles" do
+      full_circle = db.create_circle({name: "ATX Runners", admin_id: @user_objs[1].id, max_members: 3, location:[32, 44]})
+      result = db.circles_filter_full
+
     end
   end
 
@@ -304,6 +324,51 @@ shared_examples 'a database' do
         wallet = db.create_wallet({user_id: @user.id, balance: 20.00})
         result = db.get_wallet(wallet.id)
         expect(result.balance).to eq(20.00)
+    end
+
+    it "updates a wallet" do
+
+    end
+  end
+
+  # CHALLENGE TESTS
+  describe 'Challenge' do
+    before :each do
+      users = [
+        {username: "Fast Feet", gender: 1, email:"marathons@speed.com", password:"abc123", bday:"2/8/1987"},
+        {username: "Runna Lot", gender: 2, email:"jogger@run.com", password:"111222", bday:"6/6/1966"}
+      ]
+
+    @user_objs = []
+    users.each do |info|
+      @user_objs << db.create_user(info)
+    end
+
+    circle1 = db.create_circle({name: "MakerSquare", admin_id: @user_objs[0].id, max_members: 30})
+    circle2 = db.create_circle({name: "Hack Reactor", admin_id: @user_objs[1].id, max_members: 25})
+    @challenge = db.create_challenge({name: "Monday Funday", sender_id: circle1.id, recipient_id: circle2.id, creator_id: circle1.admin_id, time: Time.now, location:[22, 33], pace: 1, notes:"Doom!", complete:false, min_amt:0, age_pref: 0, gender_pref: 0, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: circle1.id})
+    end
+
+    it "creates a challenge" do
+    expect(@challenge.name).to eq("Monday Funday")
+    expect (db.get_post(@challenge.post_id).name).to eq("Doom!")
+    end
+
+    it "gets a challenge" do
+      challenge = db.get_challenge(@challenge.id)
+      expect(challenge.name).to eq("Monday Funday")
+    end
+
+    it "updates a challenge" do
+    # add time tests
+      updated = db.update_challenge(@challenge.id, {name:"Go HAM", location:[33, 44]})
+      expect(updated.name).to eq("Go HAM")
+      expect(updated.location).to include(33, 44)
+    end
+
+    it "deletes a challenge" do
+      db.delete_challenge(@challenge.id)
+      expect(db.get_challenge(@challenge.id)).to eq(nil)
     end
   end
 
