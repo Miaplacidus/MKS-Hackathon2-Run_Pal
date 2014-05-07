@@ -222,13 +222,6 @@ shared_examples 'a database' do
       # call .last on the end keyword
     end
 
-    xit "will not create a commitment without an amount and user and post ids" do
-      commit = db.create_commitment({})
-      expect(commit).to eq(nil)
-      commit2 = db.create_commitment({post_id: 1, amount: 20})
-      expect(commit2).to eq(nil)
-    end
-
     xit "gets a commitment" do
       commit = db.get_commit(@user_objs[0].id)
       expect(commit.amount).to eq(3)
