@@ -160,13 +160,13 @@ shared_examples 'a database' do
       expect(db.get_post(post.id)).to eq(nil)
     end
 
-    xit "filters posts by age preference" do
+    it "filters posts by age preference" do
       result = db.posts_filter_age(3)
       result.count.should eql(2)
       result[1].age_pref.should eql(3)
     end
 
-    xit "filters posts by gender preference" do
+    it "filters posts by gender preference" do
       result = db.posts_filter_gender(0)
       result.count.should eql(2)
       result[1].gender_pref.should eql(0)
@@ -178,10 +178,10 @@ shared_examples 'a database' do
       result[1].location.should eql("Austin")
     end
 
-    xit "filters posts by pace" do
+    it "filters posts by pace" do
       result = db.posts_filter_pace(2)
       result.count.should eql(1)
-      result[1].notes.should eql("Sunny day run!")
+      result[0].notes.should eql("Sunny day run!")
     end
 
     xit "filters posts by time" do
@@ -215,11 +215,18 @@ shared_examples 'a database' do
       @commit2 = db.create_commit({user_id: @user_objs[1].id, post_id: @post_objs[1].id, amount: 5, fulfilled: true})
     end
 
-    it "creates a commitment with fulfilled set to false" do
+    xit "creates a commitment with fulfilled set to false" do
       expect(db.get_user(@commit1.user_id).username).to eq("Fast Feet")
       expect(db.get_post(@commit1.post_id).pace).to eq(2)
-      expect(@commit1.fulfilled).to eq(false)
+      expect(commit.fulfilled).to eq(false)
       # call .last on the end keyword
+    end
+
+    xit "will not create a commitment without an amount and user and post ids" do
+      commit = db.create_commitment({})
+      expect(commit).to eq(nil)
+      commit2 = db.create_commitment({post_id: 1, amount: 20})
+      expect(commit2).to eq(nil)
     end
 
     xit "gets a commitment" do
