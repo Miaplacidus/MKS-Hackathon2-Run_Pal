@@ -115,46 +115,46 @@ shared_examples 'a database' do
       expect((db.get_circle(circleID)).max_members).to eq(30)
     end
 
-    xit "gets a post" do
+    it "gets a post" do
       post = @post_objs[2]
       result = db.get_post(post.id)
-      expect(result.notes).to eq("Will be a fairly relaxed jog")
+      expect(result.notes).to eq("Will be a fairly relaxed jog.")
       expect(result.gender_pref).to eq(1)
       expect(result.age_pref).to eq(3)
       expect(result.min_amt).to eq(12.00)
     end
 
-    xit "gets all people committed to a run" do
+    it "gets all people committed to a run" do
       post = @post_objs[2]
       committers = db.get_committed_users(post.id)
       expect(committers.count).to eq(2)
-      expect(committers[1].username).to eq("Runna Lot")
+      expect(db.get_user(committers[1]).username).to eq("Runna Lot")
     end
 
-    xit "gets all people who have attended a run" do
+    it "gets all people who attended a run" do
       post = @post_objs[3]
       attendees = db.get_attendees(post.id)
       expect(attendees.count).to eq(2)
-      expect(attendees[1].username).to eq("Nee Upp")
+      expect(db.get_user(attendees[1]).username).to eq("Nee Upp")
     end
 
-    xit "gets all posts" do
+    it "gets all posts" do
       result = db.all_posts
       result.count.should eql(4)
       expect(result.map &:gender_pref).to include(0, 1)
     end
 
-    xit "updates posts" do
+    it "updates posts" do
       # UPDATE TIME AS WELL
       post = @post_objs[1]
       result = db.update_post(post.id, {age_pref: 4, pace: 3, attend_ids: [@user_objs[0].id, @user_objs[1].id]})
       expect(result.age_pref).to eq(4)
       expect(result.pace).to eq(3)
       expect(result.attend_ids.count).to eq(2)
-      expect(result.attend_ids[0].username).to eq("Fast Feet")
+      expect(db.get_user(result.attend_ids[0]).username).to eq("Fast Feet")
     end
 
-    xit "deletes posts" do
+    it "deletes posts" do
       post = @post_objs[1]
       db.delete_post(post.id)
       expect(db.get_post(post.id)).to eq(nil)
@@ -230,7 +230,7 @@ shared_examples 'a database' do
     end
 
     xit "gets a commitment" do
-      commit = db.get_commit(@commit1.id)
+      commit = db.get_commit(@user_objs[0].id)
       expect(commit.amount).to eq(3)
     end
 
@@ -306,9 +306,10 @@ shared_examples 'a database' do
       expect(updated.max_members).to eq(35)
     end
 
-    xit "filters out full circles" do
-      full_circle = db.create_circle({name: "ATX Runners", admin_id: @user_objs[1].id, max_members: 3, location:[32, 44]})
+    it "filters out full circles" do
+      full_circle = db.create_circle({name: "ATX Runners", admin_id: @user_objs[1].id, max_members: 3, location:[32, 44], member_ids:[@user_objs[0], @user_objs[1], @user_objs[2]]})
       result = db.circles_filter_full
+      expect(result.count).to eq(2)
     end
   end
 
@@ -360,21 +361,21 @@ shared_examples 'a database' do
     @challenge = db.create_challenge({name: "Monday Funday", sender_id: circle1.id, recipient_id: circle2.id, creator_id: circle1.admin_id, time: Time.now, location:[22, 33], pace: 1, notes:"Doom!", complete:false, min_amt:0, age_pref: 0, gender_pref: 0, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: circle1.id})
     end
 
-    xit "creates a challenge" do
+    it "creates a challenge with accepted set to default of false" do
     expect(@challenge.name).to eq("Monday Funday")
-    expect (db.get_post(@challenge.post_id).name).to eq("Doom!")
+    expect(db.get_post(@challenge.post_id).notes).to eq("Doom!")
     end
 
-    xit "gets a challenge" do
+    it "gets a challenge" do
       challenge = db.get_challenge(@challenge.id)
       expect(challenge.name).to eq("Monday Funday")
     end
 
-    xit "updates a challenge" do
+    it "updates a challenge" do
     # add time tests
       updated = db.update_challenge(@challenge.id, {name:"Go HAM", location:[33, 44]})
       expect(updated.name).to eq("Go HAM")
-      expect(updated.location).to include(33, 44)
+      expect(db.get_post(updated.post_id).location).to include(33, 44)
     end
 
     xit "deletes a challenge" do

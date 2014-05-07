@@ -22,13 +22,31 @@ module RunPal
       end
 
       def create_challenge(attrs)
-
+        cid = @challenge_id_counter+=1
+        pid = @post_id_counter+=1
+        attrs[:id] = pid
+        RunPal::Post.new(attrs).tap{|post| @posts[pid] = post}
+        attrs[:id] = cid
+        attrs[:post_id] = pid
+        RunPal::Challenge.new(attrs).tap{|challenge| @challenges[cid] = challenge}
       end
 
       def get_challenge(id)
+        @challenges[id]
       end
 
-      def update_challenge(attrs)
+      def get_circle_challenges(id)
+      end
+
+      def update_challenge(id, attrs)
+         if @challenges[id]
+          attrs.each do |key, value|
+            setter = "#{key}="
+            @challenges[id].send(setter, value) if @challenges[id].class.method_defined?(setter)
+            @posts[@challenges[id].post_id].send(setter, value) if @posts[@challenges[id].post_id].class.method_defined?(setter)
+          end
+        end
+        @challenges[id]
       end
 
       def create_circle(attrs)
@@ -49,6 +67,13 @@ module RunPal
       end
 
       def circles_filter_full
+        circle_arr = []
+        @circles.each do |cid, circle|
+          if circle.member_ids.length < circle.max_members
+            circle_arr << circle
+          end
+        end
+        circle_arr
       end
 
       def update_circle(id, attrs)
@@ -67,7 +92,8 @@ module RunPal
         RunPal::Commitment.new(attrs).tap{|commit| @commits[id] = commit}
       end
 
-      def get_commit(id)
+      def get_commit(user_id)
+
       end
 
       def get_user_commit(user_id)
@@ -82,27 +108,41 @@ module RunPal
         RunPal::Post.new(attrs).tap{|post| @posts[id] = post}
       end
 
-      def create_circle_post(circle_id)
+      def create_circle_post(circle_id, attrs)
       end
 
-      def get_post(attrs)
+      def get_post(id)
+        @posts[id]
       end
 
-      def all_posts(attrs)
+      def all_posts
+        @posts.values
       end
 
       def get_committed_users(post_id)
+        post = @posts[post_id]
+        post.committer_ids
       end
 
       def get_attendees(post_id)
+        post = @posts[post_id]
+        post.attend_ids
       end
 
-      def update_post(id, updates)
+      def update_post(id, attrs)
+        if @posts[id]
+          attrs.each do |key, value|
+            setter = "#{key}="
+            @posts[id].send(setter, value) if @posts[id].class.method_defined?(setter)
+          end
+        end
+        @posts[id]
       end
 
-      def delete_old_posts
-        # delete posts older than 1 year
+      def delete_post(id)
+        @posts.delete(id)
       end
+
       def posts_filter_age(age)
       end
 
