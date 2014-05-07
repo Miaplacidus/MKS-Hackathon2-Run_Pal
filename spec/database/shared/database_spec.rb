@@ -178,10 +178,10 @@ shared_examples 'a database' do
       result[1].location.should eql("Austin")
     end
 
-    xit "filters posts by pace" do
+    it "filters posts by pace" do
       result = db.posts_filter_pace(2)
       result.count.should eql(1)
-      result[1].notes.should eql("Sunny day run!")
+      result[0].notes.should eql("Sunny day run!")
     end
 
     xit "filters posts by time" do

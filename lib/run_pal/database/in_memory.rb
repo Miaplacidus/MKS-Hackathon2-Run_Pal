@@ -74,7 +74,15 @@ module RunPal
       end
 
       def circles_filter_location(location, radius)
-
+        circle_arr = []
+        @circles.each do |circle|
+          loc_arr = circle.location
+          distance = Math.sqrt((location[0] - loc[0])**2 + (location[1] - loc[1])**2)
+          if distance <= radius
+            circle_arr << circle
+          end
+        end
+        circle_arr
       end
 
       def circles_filter_full
