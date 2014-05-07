@@ -234,8 +234,9 @@ shared_examples 'a database' do
       expect(commits_arr[0].amount).to eq(5)
     end
 
-    xit "updates a commitment" do
-
+    it "updates a commitment" do
+      commit = db.update_commit(@commit1.id, {amount: 10})
+      expect(commit.amount).to eq(10)
     end
   end
 

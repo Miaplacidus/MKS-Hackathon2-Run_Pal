@@ -73,7 +73,8 @@ module RunPal
         @circles.values
       end
 
-      def circles_filter_location(location)
+      def circles_filter_location(location, radius)
+
       end
 
       def circles_filter_full
@@ -123,7 +124,7 @@ module RunPal
             @commits[id].send(setter, value) if @commits[id].class.method_defined?(setter)
           end
         end
-        @circles[id]
+        @commits[id]
       end
 
       def create_post(attrs)
