@@ -184,15 +184,29 @@ module RunPal
       end
 
       def posts_filter_age(age)
+        post_objects = @posts.values
+        posts_with_correct_age = post_objects.select do |post|
+          post.age_pref == age
+        end
+        posts_with_correct_age
       end
 
       def posts_filter_gender(gender)
+        post_objects = @posts.values
+        posts_with_correct_gender = post_objects.select do |post|
+          post.gender_pref == gender
+        end
+        posts_with_correct_gender
       end
 
       def posts_filter_location(location)
       end
 
       def posts_filter_pace(pace)
+        post_objects = @posts.values
+        post_objects.select do |post|
+          post.pace == pace
+        end
       end
 
       def posts_filter_time(start_time, end_time)
