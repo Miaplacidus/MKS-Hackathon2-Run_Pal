@@ -15,7 +15,7 @@ module RunPal
         @wallet_id_counter = 0
         @challenges = {} #Key: challenge_id, Value: challenge_obj
         @circles = {} # Key: circle_id, Value: circle_obj
-        @commits = {} # Key: user_id, Value: commitment_obj
+        @commits = {} # Key: commit_id, Value: commitment_obj
         @posts = {} # Key: post_id, Value: post_obj
         @users = {} # Key: user_id, Value: user_obj
         @wallets = {} # Key: user_id, Value: wallet_obj
@@ -55,6 +55,10 @@ module RunPal
         @challenges[id]
       end
 
+      def delete_challenge(id)
+        @challenges.delete(id)
+      end
+
       def create_circle(attrs)
         id = @circle_id_counter+=1
         attrs[:id] = id
@@ -69,7 +73,16 @@ module RunPal
         @circles.values
       end
 
-      def circles_filter_location(location)
+      def circles_filter_location(location, radius)
+        circle_arr = []
+        @circles.each do |circle|
+          loc_arr = circle.location
+          distance = Math.sqrt((location[0] - loc[0])**2 + (location[1] - loc[1])**2)
+          if distance <= radius
+            circle_arr << circle
+          end
+        end
+        circle_arr
       end
 
       def circles_filter_full
@@ -98,9 +111,13 @@ module RunPal
         RunPal::Commitment.new(attrs).tap{|commit| @commits[id] = commit}
       end
 
+      def get_commit(id)
+        @commits[id]
+      end
+
       def get_user_commit(user_id)
         commit_arr = []
-        @commits.each do |commit|
+        @commits.each do |cid, commit|
           if commit.user_id == user_id
             commit_arr << commit
           end
@@ -115,7 +132,7 @@ module RunPal
             @commits[id].send(setter, value) if @commits[id].class.method_defined?(setter)
           end
         end
-        @circles[id]
+        @commits[id]
       end
 
       def create_post(attrs)
@@ -124,11 +141,18 @@ module RunPal
         RunPal::Post.new(attrs).tap{|post| @posts[id] = post}
       end
 
-      def create_circle_post(circle_id, attrs)
-      end
-
       def get_post(id)
         @posts[id]
+      end
+
+      def get_circle_posts(circle_id)
+        post_arr = []
+        @posts.each do |pid, post|
+          if post.circle_id == circle_id
+            post_arr << post
+          end
+        end
+        post_arr
       end
 
       def all_posts

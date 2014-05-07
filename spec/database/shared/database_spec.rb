@@ -102,17 +102,17 @@ shared_examples 'a database' do
       expect(post.circle_id).to eq(nil)
     end
 
-    xit "will not create a post without requisite information" do
-      # required: all attributes except note
-      post = db.create_post({username:"Jane Doe"})
-      expect(post).to eq(nil)
-    end
-
-    xit "creates a post associated with a circle" do
+    it "creates a post associated with a circle" do
       post = @post_objs[3]
       circleID = post.circle_id
       expect((db.get_circle(circleID)).name).to eq("MakerSquare")
       expect((db.get_circle(circleID)).max_members).to eq(30)
+    end
+
+    it "gets all posts associated with a circle" do
+      post_arr = db.get_circle_posts(@circle.id)
+      expect(post_arr.count).to eq(1)
+      expect(post_arr[0].age_pref).to eq(4)
     end
 
     it "gets a post" do
@@ -160,13 +160,13 @@ shared_examples 'a database' do
       expect(db.get_post(post.id)).to eq(nil)
     end
 
-    it "filters posts by age preference" do
+    xit "filters posts by age preference" do
       result = db.posts_filter_age(3)
       result.count.should eql(2)
       result[1].age_pref.should eql(3)
     end
 
-    it "filters posts by gender preference" do
+    xit "filters posts by gender preference" do
       result = db.posts_filter_gender(0)
       result.count.should eql(2)
       result[1].gender_pref.should eql(0)
@@ -215,34 +215,28 @@ shared_examples 'a database' do
       @commit2 = db.create_commit({user_id: @user_objs[1].id, post_id: @post_objs[1].id, amount: 5, fulfilled: true})
     end
 
-    xit "creates a commitment with fulfilled set to false" do
+    it "creates a commitment with fulfilled set to false" do
       expect(db.get_user(@commit1.user_id).username).to eq("Fast Feet")
       expect(db.get_post(@commit1.post_id).pace).to eq(2)
-      expect(commit.fulfilled).to eq(false)
+      expect(@commit1.fulfilled).to eq(false)
       # call .last on the end keyword
     end
 
-    xit "will not create a commitment without an amount and user and post ids" do
-      commit = db.create_commitment({})
-      expect(commit).to eq(nil)
-      commit2 = db.create_commitment({post_id: 1, amount: 20})
-      expect(commit2).to eq(nil)
-    end
-
-    xit "gets a commitment" do
-      commit = db.get_commit(@user_objs[0].id)
+    it "gets a commitment" do
+      commit = db.get_commit(@commit1.id)
       expect(commit.amount).to eq(3)
     end
 
-    xit "gets commitments by user_id" do
+    it "gets commitments by user_id" do
       commits_arr = db.get_user_commit(@user_objs[1].id)
       expect(commits_arr.count).to eq(1)
       expect(commits_arr[0].fulfilled).to eq(true)
       expect(commits_arr[0].amount).to eq(5)
     end
 
-    xit "updates a commitment" do
-
+    it "updates a commitment" do
+      commit = db.update_commit(@commit1.id, {amount: 10})
+      expect(commit.amount).to eq(10)
     end
   end
 
@@ -378,7 +372,7 @@ shared_examples 'a database' do
       expect(db.get_post(updated.post_id).location).to include(33, 44)
     end
 
-    xit "deletes a challenge" do
+    it "deletes a challenge" do
       db.delete_challenge(@challenge.id)
       expect(db.get_challenge(@challenge.id)).to eq(nil)
     end
