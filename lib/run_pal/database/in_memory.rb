@@ -55,6 +55,10 @@ module RunPal
         @challenges[id]
       end
 
+      def delete_challenge(id)
+        @challenges.delete(id)
+      end
+
       def create_circle(attrs)
         id = @circle_id_counter+=1
         attrs[:id] = id
@@ -104,7 +108,7 @@ module RunPal
 
       def get_user_commit(user_id)
         commit_arr = []
-        @commits.each do |key, commit|
+        @commits.each do |cid, commit|
           if commit.user_id == user_id
             commit_arr << commit
           end
@@ -128,11 +132,18 @@ module RunPal
         RunPal::Post.new(attrs).tap{|post| @posts[id] = post}
       end
 
-      def create_circle_post(circle_id, attrs)
-      end
-
       def get_post(id)
         @posts[id]
+      end
+
+      def get_circle_posts(circle_id)
+        post_arr = []
+        @posts.each do |pid, post|
+          if post.circle_id == circle_id
+            post_arr << post
+          end
+        end
+        post_arr
       end
 
       def all_posts

@@ -102,17 +102,17 @@ shared_examples 'a database' do
       expect(post.circle_id).to eq(nil)
     end
 
-    xit "will not create a post without requisite information" do
-      # required: all attributes except note
-      post = db.create_post({username:"Jane Doe"})
-      expect(post).to eq(nil)
-    end
-
-    xit "creates a post associated with a circle" do
+    it "creates a post associated with a circle" do
       post = @post_objs[3]
       circleID = post.circle_id
       expect((db.get_circle(circleID)).name).to eq("MakerSquare")
       expect((db.get_circle(circleID)).max_members).to eq(30)
+    end
+
+    it "gets all posts associated with a circle" do
+      post_arr = db.get_circle_posts(@circle.id)
+      expect(post_arr.count).to eq(1)
+      expect(post_arr[0].age_pref).to eq(4)
     end
 
     it "gets a post" do
@@ -371,7 +371,7 @@ shared_examples 'a database' do
       expect(db.get_post(updated.post_id).location).to include(33, 44)
     end
 
-    xit "deletes a challenge" do
+    it "deletes a challenge" do
       db.delete_challenge(@challenge.id)
       expect(db.get_challenge(@challenge.id)).to eq(nil)
     end
