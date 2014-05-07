@@ -215,10 +215,10 @@ shared_examples 'a database' do
       @commit2 = db.create_commit({user_id: @user_objs[1].id, post_id: @post_objs[1].id, amount: 5, fulfilled: true})
     end
 
-    xit "creates a commitment with fulfilled set to false" do
+    it "creates a commitment with fulfilled set to false" do
       expect(db.get_user(@commit1.user_id).username).to eq("Fast Feet")
       expect(db.get_post(@commit1.post_id).pace).to eq(2)
-      expect(commit.fulfilled).to eq(false)
+      expect(@commit1.fulfilled).to eq(false)
       # call .last on the end keyword
     end
 

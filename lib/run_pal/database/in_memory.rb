@@ -35,7 +35,13 @@ module RunPal
         @challenges[id]
       end
 
-      def get_circle_challenges(id)
+      def get_circle_challenges(circle_id)
+        challenge_arr = []
+        @challenges.each do |challenge|
+          if challenge.sender_id == circle_id || challenge.recipient_id == circle_id
+            challenge_arr << challenge
+          end
+        end
       end
 
       def update_challenge(id, attrs)
@@ -92,14 +98,24 @@ module RunPal
         RunPal::Commitment.new(attrs).tap{|commit| @commits[id] = commit}
       end
 
-      def get_commit(user_id)
-
-      end
-
       def get_user_commit(user_id)
+        commit_arr = []
+        @commits.each do |commit|
+          if commit.user_id == user_id
+            commit_arr << commit
+          end
+        end
+        commit_arr
       end
 
-      def update_commit(id, updates)
+      def update_commit(id, attrs)
+         if @commits[id]
+          attrs.each do |key, value|
+            setter = "#{key}="
+            @commits[id].send(setter, value) if @commits[id].class.method_defined?(setter)
+          end
+        end
+        @circles[id]
       end
 
       def create_post(attrs)
