@@ -15,7 +15,7 @@ module RunPal
         @wallet_id_counter = 0
         @challenges = {} #Key: challenge_id, Value: challenge_obj
         @circles = {} # Key: circle_id, Value: circle_obj
-        @commits = {} # Key: user_id, Value: commitment_obj
+        @commits = {} # Key: commit_id, Value: commitment_obj
         @posts = {} # Key: post_id, Value: post_obj
         @users = {} # Key: user_id, Value: user_obj
         @wallets = {} # Key: user_id, Value: wallet_obj
@@ -98,9 +98,13 @@ module RunPal
         RunPal::Commitment.new(attrs).tap{|commit| @commits[id] = commit}
       end
 
+      def get_commit(id)
+        @commits[id]
+      end
+
       def get_user_commit(user_id)
         commit_arr = []
-        @commits.each do |commit|
+        @commits.each do |key, commit|
           if commit.user_id == user_id
             commit_arr << commit
           end

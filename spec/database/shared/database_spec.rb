@@ -222,12 +222,12 @@ shared_examples 'a database' do
       # call .last on the end keyword
     end
 
-    xit "gets a commitment" do
-      commit = db.get_commit(@user_objs[0].id)
+    it "gets a commitment" do
+      commit = db.get_commit(@commit1.id)
       expect(commit.amount).to eq(3)
     end
 
-    xit "gets commitments by user_id" do
+    it "gets commitments by user_id" do
       commits_arr = db.get_user_commit(@user_objs[1].id)
       expect(commits_arr.count).to eq(1)
       expect(commits_arr[0].fulfilled).to eq(true)
