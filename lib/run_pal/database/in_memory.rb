@@ -96,8 +96,7 @@ module RunPal
       end
 
       def get_circle(id)
-        attrs = @circles[id]
-        RunPal::Circle.new(attrs)
+        circle = @circles[id] ? RunPal::Circle.new(@challenges[id]) : nil
       end
 
       def all_circles
