@@ -250,6 +250,10 @@ module RunPal
       end
 
       def posts_filter_time(start_time, end_time)
+        post_objects = @post.values
+        post_objects.select do |post|
+          start_time < post.time && post.time < end_time
+        end
       end
 
       def create_user(attrs)
