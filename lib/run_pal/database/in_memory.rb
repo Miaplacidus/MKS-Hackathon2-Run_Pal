@@ -145,11 +145,13 @@ module RunPal
       def create_commit(attrs)
         id = @commit_id_counter+=1
         attrs[:id] = id
-        RunPal::Commitment.new(attrs).tap{|commit| @commits[id] = commit}
+        @commits[id] = attrs
+        RunPal::Commitment.new(attrs)
       end
 
       def get_commit(id)
-        @commits[id]
+        attrs = @commits[id]
+        RunPal::Commitment.new(attrs)
       end
 
       def get_user_commit(user_id)

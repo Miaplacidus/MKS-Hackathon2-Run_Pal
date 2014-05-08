@@ -223,26 +223,26 @@ shared_examples 'a database' do
       @commit2 = db.create_commit({user_id: @user_objs[1].id, post_id: @post_objs[1].id, amount: 5, fulfilled: true})
     end
 
-    xit "creates a commitment with fulfilled set to false" do
+    it "creates a commitment with fulfilled set to false" do
       expect(db.get_user(@commit1.user_id).username).to eq("Fast Feet")
       expect(db.get_post(@commit1.post_id).pace).to eq(2)
       expect(@commit1.fulfilled).to eq(false)
       # call .last on the end keyword
     end
 
-    xit "gets a commitment" do
+    it "gets a commitment" do
       commit = db.get_commit(@commit1.id)
       expect(commit.amount).to eq(3)
     end
 
-    xit "gets commitments by user_id" do
+    it "gets commitments by user_id" do
       commits_arr = db.get_user_commit(@user_objs[1].id)
       expect(commits_arr.count).to eq(1)
       expect(commits_arr[0].fulfilled).to eq(true)
       expect(commits_arr[0].amount).to eq(5)
     end
 
-    xit "updates a commitment" do
+    it "updates a commitment" do
       commit = db.update_commit(@commit1.id, {amount: 10})
       expect(commit.amount).to eq(10)
     end
