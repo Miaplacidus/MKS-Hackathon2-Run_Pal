@@ -46,7 +46,7 @@ module RunPal
       end
 
       def get_challenge(id)
-        challenge = RunPal::Challenge.new(@challenges[id])
+        challenge = @challenges[id] ? RunPal::Challenge.new(@challenges[id]) : nil
       end
 
       def get_circle_challenges(circle_id)
@@ -59,14 +59,26 @@ module RunPal
       end
 
       def update_challenge(id, attrs)
-         if @challenges[id]
-          attrs.each do |key, value|
-            setter = "#{key}="
-            @challenges[id].send(setter, value) if @challenges[id].class.method_defined?(setter)
-            @posts[@challenges[id].post_id].send(setter, value) if @posts[@challenges[id].post_id].class.method_defined?(setter)
+          if @challenges[id]
+          # Remove challenge-specific attributes from attrs
+          post_changes = attrs.clone
+          post_changes.delete_if do |name, value|
+            setter = "#{name}="
+            !RunPal::Post.method_defined?(setter)
+          end
+          pid = @challenges[id][:post_id]
+          post_attrs = @posts[pid]
+          post_attrs.merge!(post_changes)
+
+          attrs.delete_if do |name, value|
+            setter = "#{name}="
+            !RunPal::Challenge.method_defined?(setter)
           end
         end
-        @challenges[id]
+        challenge_attrs = @challenges[id]
+        challenge_attrs.merge!(attrs)
+
+        RunPal::Challenge.new(challenge_attrs)
       end
 
       def delete_challenge(id)
