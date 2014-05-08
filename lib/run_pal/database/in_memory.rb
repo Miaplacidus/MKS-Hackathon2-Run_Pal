@@ -380,14 +380,18 @@ module RunPal
 
       def get_wallet_by_userid(user_id)
         attrs = @users[user_id]
-        return nil if attrs.nil?
         user = RunPal::User.new(attrs)
         wallet_attrs = @wallets[user.id]
+        return nil if wallet_attrs.nil?
         wallet = RunPal::Wallet.new(wallet_attrs)
       end
 
       def update_wallet(user_id, attrs)
-
+        user_attrs = @users[user_id]
+        user = RunPal::User.new(user_attrs)
+        wallet_attrs = @wallets[user.id]
+        wallet_attrs.merge!(attrs)
+        RunPal::Wallet.new(wallet_attrs)
       end
 
       def delete_wallet(user_id)
