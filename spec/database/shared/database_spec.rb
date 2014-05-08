@@ -78,11 +78,16 @@ shared_examples 'a database' do
 
       @circle = db.create_circle({name: "MakerSquare", admin_id: @user_objs[0].id, max_members: 30})
 
+      @t_apr_first = Time.parse("Apr 1 2014")
+      @t_may_first = Time.parse("May 1 2014")
+      @t_june_first = Time.parse("June 1 2014")
+      @t_july_first = Time.parse("July 1 2014")
+
       posts = [
-        {creator_id: @user_objs[0].id, time: Time.now, location:[40, 51], pace: 2, notes:"Sunny day run!", complete:false, min_amt:10.50, age_pref: 0, gender_pref: 0, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil},
-        {creator_id: @user_objs[1].id, time: Time.now, location:[44, 55], pace: 1, notes:"Let's go.", complete:false, min_amt:5.50, age_pref: 3, gender_pref: 1, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil},
-        {creator_id: @user_objs[2].id, time: Time.now, location:[66, 77], pace: 7, notes:"Will be a fairly relaxed jog.", complete:true, min_amt:12.00, age_pref: 3, gender_pref: 1, committer_ids: [@user_objs[0].id, @user_objs[1].id], attend_ids: [@user_objs[0].id, @user_objs[1].id], circle_id: nil},
-        {creator_id: @user_objs[3].id, time: Time.now, location:[88, 99], pace: 0, complete:false, min_amt:20.00, age_pref: 4, gender_pref: 0, committer_ids: [@user_objs[0].id, @user_objs[1].id, @user_objs[2].id, @user_objs[3].id], attend_ids: [@user_objs[1].id, @user_objs[3].id], circle_id: @circle.id},
+        {creator_id: @user_objs[0].id, time: @t_apr_first, location:[40, 51], pace: 2, notes:"Sunny day run!", complete:false, min_amt:10.50, age_pref: 0, gender_pref: 0, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil},
+        {creator_id: @user_objs[1].id, time: @t_may_first, location:[44, 55], pace: 1, notes:"Let's go.", complete:false, min_amt:5.50, age_pref: 3, gender_pref: 1, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil},
+        {creator_id: @user_objs[2].id, time: @t_june_first, location:[66, 77], pace: 7, notes:"Will be a fairly relaxed jog.", complete:true, min_amt:12.00, age_pref: 3, gender_pref: 1, committer_ids: [@user_objs[0].id, @user_objs[1].id], attend_ids: [@user_objs[0].id, @user_objs[1].id], circle_id: nil},
+        {creator_id: @user_objs[3].id, time: @t_july_first, location:[88, 99], pace: 0, complete:false, min_amt:20.00, age_pref: 4, gender_pref: 0, committer_ids: [@user_objs[0].id, @user_objs[1].id, @user_objs[2].id, @user_objs[3].id], attend_ids: [@user_objs[1].id, @user_objs[3].id], circle_id: @circle.id},
       ]
 
       @post_objs = []
@@ -184,7 +189,10 @@ shared_examples 'a database' do
       result[0].notes.should eql("Sunny day run!")
     end
 
-    xit "filters posts by time" do
+    it "filters posts by time" do
+      result = db.posts_filter_time(@t_apr_first, @t_july_first)
+      result.count.should eql(2)
+      result[0].notes.should eql("Let's go.")
     end
 
   end
@@ -285,7 +293,7 @@ shared_examples 'a database' do
       expect(circle.name).to eq("Crazy Apps")
     end
 
-    it "gets all circles" do
+    xit "gets all circles" do
       circles = db.all_circles
       expect(circles.count).to eq(2)
       expect(circles.map &:max_members).to include(14, 19)
@@ -294,13 +302,13 @@ shared_examples 'a database' do
     xit "filters circles by location and search radius" do
     end
 
-    it "updates a circle" do
+    xit "updates a circle" do
       updated = db.update_circle(@circle1.id, {name:"Runner's World", max_members: 35})
       expect(updated.name).to eq("Runner's World")
       expect(updated.max_members).to eq(35)
     end
 
-    it "filters out full circles" do
+    xit "filters out full circles" do
       full_circle = db.create_circle({name: "ATX Runners", admin_id: @user_objs[1].id, max_members: 3, location:[32, 44], member_ids:[@user_objs[0], @user_objs[1], @user_objs[2]]})
       result = db.circles_filter_full
       expect(result.count).to eq(2)
