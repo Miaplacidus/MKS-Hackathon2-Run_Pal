@@ -104,16 +104,19 @@ module RunPal
         @circles.values
       end
 
-      def circles_filter_location(location, radius)
-        circle_arr = []
+      def circles_filter_location(user_loc, radius)
+         mi_to_km = 1.60934
+        earth_radius = 6371
+        post_arr = []
+        radius = radius * mi_to_km
         @circles.each do |cid, circle|
-          loc_arr = circle.location
-          distance = Math.sqrt((location[0] - loc[0])**2 + (location[1] - loc[1])**2)
+          loc_arr = post.location
+          distance = Math.acos(Math.sin(user_loc[0]) * Math.sin(loc_arr[0]) + Math.cos(user_loc[0]) * Math.cos(loc_arr[0]) * Math.cos(loc_arr[1] - user_loc[1])) * earth_radius
           if distance <= radius
             circle_arr << circle
           end
         end
-        circle_arr
+        circle
       end
 
       def circles_filter_full
