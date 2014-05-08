@@ -296,22 +296,25 @@ module RunPal
         earth_radius = 6371
         post_arr = []
         radius = radius * mi_to_km
-        @posts.each do |pid, post|
-          loc_arr = post.location
+        @posts.each do |pid, post_attrs|
+          loc_arr = post_attrs[:location]
           distance = Math.acos(Math.sin(user_loc[0]) * Math.sin(loc_arr[0]) + Math.cos(user_loc[0]) * Math.cos(loc_arr[0]) * Math.cos(loc_arr[1] - user_loc[1])) * earth_radius
-        # acos(sin(1.3963) * sin(Lat) + cos(1.3963) * cos(Lat) * cos(Lon - (-0.6981))) * 6371 <= 1000
           if distance <= radius
-            post_arr << post
+            post_arr << RunPal::Post.new(post_attrs)
           end
         end
         post_arr
       end
 
       def posts_filter_pace(pace)
-        post_objects = @posts.values
-        post_objects.select do |post|
-          post.pace == pace
+        post_arr = []
+        post_attributes = @posts.values
+        post_attributes.each do |attr_hash|
+          if attr_hash[:pace] == pace
+            post_arr << RunPal::Post.new(attr_hash)
+          end
         end
+        post_arr
       end
 
       def posts_filter_time(start_time, end_time)

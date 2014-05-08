@@ -171,19 +171,19 @@ shared_examples 'a database' do
       result[1].age_pref.should eql(3)
     end
 
-    xit "filters posts by gender preference" do
+    it "filters posts by gender preference" do
       result = db.posts_filter_gender(0)
       result.count.should eql(2)
       result[1].gender_pref.should eql(0)
     end
 
-    xit "filters posts by location and search radius" do
+    it "filters posts by location and search radius" do
       result = db.posts_filter_location([44,55], 10)
       result.count.should eql(1)
       expect(result.map &:notes).to include("Let's go.")
     end
 
-    xit "filters posts by pace" do
+    it "filters posts by pace" do
       result = db.posts_filter_pace(2)
       result.count.should eql(1)
       result[0].notes.should eql("Sunny day run!")
