@@ -155,23 +155,13 @@ module RunPal
       end
 
       def get_user_commit(user_id)
-        commit_arr = []
-        @commits.each do |cid, commit|
-          if commit.user_id == user_id
-            commit_arr << commit
-          end
-        end
-        commit_arr
+
       end
 
       def update_commit(id, attrs)
-         if @commits[id]
-          attrs.each do |key, value|
-            setter = "#{key}="
-            @commits[id].send(setter, value) if @commits[id].class.method_defined?(setter)
-          end
-        end
-        @commits[id]
+        commit_attrs = @commits[id]
+        commit_attrs.merge!(attrs)
+        RunPal::Commitment.new(commit_attrs)
       end
 
       def create_post(attrs)
