@@ -15,7 +15,7 @@ module RunPal
         @wallet_id_counter = 0
         @challenges = {} #Key: challenge_id, Value: challenge_obj
         @circles = {} # Key: circle_id, Value: circle_obj
-        @commits = {} # Key: commit_id, Value: commitment_obj
+        @commits = {} # Key: commit_id, Value:
         @posts = {} # Key: post_id, Value: post_obj
         @users = {} # Key: user_id, Value: user_obj
         @wallets = {} # Key: user_id, Value: wallet_obj
@@ -158,27 +158,23 @@ module RunPal
 
       def get_commit(id)
         attrs = @commits[id]
+        return nil if attrs.nil?
         RunPal::Commitment.new(attrs)
       end
 
-      def get_user_commit(user_id)
-        commit_arr = []
-        @commits.each do |cid, commit|
-          if commit.user_id == user_id
-            commit_arr << commit
-          end
+      def get_commits_by_user(user_id)
+        commits = @commits.values.select do |commit_attrs|
+          commit_attrs[:user_id] == user_id
         end
-        commit_arr
+        commits.map do |commit_attrs|
+          RunPal::Commitment.new(commit_attrs)
+        end
       end
 
       def update_commit(id, attrs)
-         if @commits[id]
-          attrs.each do |key, value|
-            setter = "#{key}="
-            @commits[id].send(setter, value) if @commits[id].class.method_defined?(setter)
-          end
-        end
-        @commits[id]
+        commit_attrs = @commits[id]
+        commit_attrs.merge!(attrs)
+        RunPal::Commitment.new(commit_attrs)
       end
 
       def create_post(attrs)
