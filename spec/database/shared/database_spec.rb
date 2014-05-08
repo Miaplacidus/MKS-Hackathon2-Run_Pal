@@ -97,7 +97,7 @@ shared_examples 'a database' do
 
     end
 
-    xit "creates a post" do
+    it "creates a post" do
       post = @post_objs[0]
       expect((db.get_user(post.creator_id)).username).to eq("Fast Feet")
       # expect(post.time).to eq()
@@ -107,20 +107,20 @@ shared_examples 'a database' do
       expect(post.circle_id).to eq(nil)
     end
 
-    xit "creates a post associated with a circle" do
+    it "creates a post associated with a circle" do
       post = @post_objs[3]
       circleID = post.circle_id
       expect((db.get_circle(circleID)).name).to eq("MakerSquare")
       expect((db.get_circle(circleID)).max_members).to eq(30)
     end
 
-    xit "gets all posts associated with a circle" do
+    it "gets all posts associated with a circle" do
       post_arr = db.get_circle_posts(@circle.id)
       expect(post_arr.count).to eq(1)
       expect(post_arr[0].age_pref).to eq(4)
     end
 
-    xit "gets a post" do
+    it "gets a post" do
       post = @post_objs[2]
       result = db.get_post(post.id)
       expect(result.notes).to eq("Will be a fairly relaxed jog.")
@@ -129,27 +129,27 @@ shared_examples 'a database' do
       expect(result.min_amt).to eq(12.00)
     end
 
-    xit "gets all people committed to a run" do
+    it "gets all people committed to a run" do
       post = @post_objs[2]
       committers = db.get_committed_users(post.id)
       expect(committers.count).to eq(2)
       expect(db.get_user(committers[1]).username).to eq("Runna Lot")
     end
 
-    xit "gets all people who attended a run" do
+    it "gets all people who attended a run" do
       post = @post_objs[3]
       attendees = db.get_attendees(post.id)
       expect(attendees.count).to eq(2)
       expect(db.get_user(attendees[1]).username).to eq("Nee Upp")
     end
 
-    xit "gets all posts" do
+    it "gets all posts" do
       result = db.all_posts
       result.count.should eql(4)
       expect(result.map &:gender_pref).to include(0, 1)
     end
 
-    xit "updates posts" do
+    it "updates posts" do
       # UPDATE TIME AS WELL
       post = @post_objs[1]
       result = db.update_post(post.id, {age_pref: 4, pace: 3, attend_ids: [@user_objs[0].id, @user_objs[1].id]})
@@ -159,13 +159,13 @@ shared_examples 'a database' do
       expect(db.get_user(result.attend_ids[0]).username).to eq("Fast Feet")
     end
 
-    xit "deletes posts" do
+    it "deletes posts" do
       post = @post_objs[1]
       db.delete_post(post.id)
       expect(db.get_post(post.id)).to eq(nil)
     end
 
-    xit "filters posts by age preference" do
+    it "filters posts by age preference" do
       result = db.posts_filter_age(3)
       result.count.should eql(2)
       result[1].age_pref.should eql(3)

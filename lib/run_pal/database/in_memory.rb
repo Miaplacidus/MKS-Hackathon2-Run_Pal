@@ -200,15 +200,6 @@ module RunPal
 
       # ^^^IFU^^^
 
-      # TEMPLATE
-      # def create_circle(attrs)
-      #   id = @circle_id_counter+=1
-      #   attrs[:id] = id
-      #   circle = RunPal::Circle.new(attrs)
-      #   @circles[id] = attrs
-      #   circle
-      # end
-      # binding.pry
       # def create_post(attrs)
       #   id = @post_id_counter+=1
       #   attrs[:id] = id
@@ -236,51 +227,42 @@ module RunPal
         RunPal::Post.new(attrs)
       end
 
-      # @posts = {
-      #   1 => post_obj1_attrs_hash,
-      #   2 => post_obj2_attrs_hash
-      # }
-
-      # post = create_post(attrs) # id is 1, pace is 2
-      # retrieved_post = get_post(1)
-      # retrieved_post.pace # 2
-
-      # post.pace = 3
-      # retrieved_post_2 = get_post(1)
-      # post.pace # 2
-
       def get_post(id)
-        attrs = @posts[id]
-        RunPal::Post.new(attrs)
+        post = @posts[id] ? RunPal::Post.new(@posts[id]) : nil
       end
 
       def get_circle_posts(circle_id)
         post_arr = []
-        @posts.each do |pid, post|
-          if post.circle_id == circle_id
-            post_arr << post
+        @posts.each do |pid, attrs|
+          if attrs[:circle_id] == circle_id
+            post_arr << RunPal::Post.new(attrs)
           end
         end
         post_arr
       end
 
       def all_posts
-        @posts.values
+        post_arr = []
+        @posts.each do |pid, attrs|
+          post_arr << RunPal::Post.new(attrs)
+        end
+        post_arr
       end
 
       def get_committed_users(post_id)
-        post = @posts[post_id]
-        post.committer_ids
+        post_attrs = @posts[post_id]
+        post_attrs[:committer_ids]
       end
 
       def get_attendees(post_id)
-        post = @posts[post_id]
-        post.attend_ids
+        post_attrs = @posts[post_id]
+        post_attrs[:attend_ids]
       end
 
       def update_post(id, attrs)
         post_attrs = @posts[id]
         post_attrs.merge!(attrs)
+        RunPal::Post.new(post_attrs)
       end
 
       def delete_post(id)
@@ -288,19 +270,25 @@ module RunPal
       end
 
       def posts_filter_age(age)
-        post_objects = @posts.values
-        posts_with_correct_age = post_objects.select do |post|
-          post.age_pref == age
+        post_arr = []
+        post_attributes = @posts.values
+        post_attributes.each do |attr_hash|
+          if attr_hash[:age_pref] == age
+            post_arr << RunPal::Post.new(attr_hash)
+          end
         end
-        posts_with_correct_age
+        post_arr
       end
 
       def posts_filter_gender(gender)
-        post_objects = @posts.values
-        posts_with_correct_gender = post_objects.select do |post|
-          post.gender_pref == gender
+        post_arr = []
+        post_attributes = @posts.values
+        post_attributes.each do |attr_hash|
+          if attr_hash[:gender_pref] == gender
+            post_arr << RunPal::Post.new(attr_hash)
+          end
         end
-        posts_with_correct_gender
+        post_arr
       end
 
       def posts_filter_location(user_loc, radius)
@@ -355,6 +343,7 @@ module RunPal
 
       def all_users
         @users.values
+
       end
 
       def update_user(id, attrs)
