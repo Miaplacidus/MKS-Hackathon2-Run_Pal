@@ -62,20 +62,51 @@ module RunPal
       def create_circle(attrs)
         id = @circle_id_counter+=1
         attrs[:id] = id
-        RunPal::Circle.new(attrs).tap{|circle| @circles[id] = circle}
+        circle = RunPal::Circle.new(attrs)
+        @circles[id] = attrs
+        circle
       end
 
       def get_circle(id)
-        @circles[id]
+        attrs = @circles[id]
+        RunPal::Circle.new(attrs)
       end
 
+# #######################################################
+      # c = db.get_circle(5)
+      # c.size = 9
+
+      # c2 = db.get_circle(5)
+      # c2.size == 5
+
+      # db.update_circle_a(89, :size => 9, :radius => 3)
+      def update_circle_a(circle_id, attrs)
+        # Grab the circle data hash by the circle_id
+        # Merge in the changes (attrs)
+        circle_attrs = @circle[circle_id]
+        # circle_attrs[:size] = attrs[:size] if attrs[:size]
+        # circle_attrs[:radius] = attrs[:radius] if attrs[:radius]
+        circle_attrs.merge!(attrs)
+      end
+
+
+      # db.update_circle_b(circle)
+      def update_circle_b(circle)
+        # Grab the circle data hash by the circle.id
+        # Merge in the changes (circle attributes)
+        circle_attrs = @circle[circle.id]
+        circle_attrs[:size] = circle.size
+        circle_attrs[:radius] = circle.radius
+      end
+
+##########################################################
       def all_circles
         @circles.values
       end
 
       def circles_filter_location(location, radius)
         circle_arr = []
-        @circles.each do |circle|
+        @circles.each do |cid, circle|
           loc_arr = circle.location
           distance = Math.sqrt((location[0] - loc[0])**2 + (location[1] - loc[1])**2)
           if distance <= radius
@@ -199,7 +230,16 @@ module RunPal
         posts_with_correct_gender
       end
 
-      def posts_filter_location(location)
+      def posts_filter_location(location, radius)
+        post_arr = []
+        @posts.each do |pid, post|
+          loc_arr = post.location
+          distance = Math.sqrt((location[0] - loc_arr[0])**2 + (location[1] - loc_arr[1])**2)
+          if distance <= radius
+            post_arr << post
+          end
+        end
+        post_arr
       end
 
       def posts_filter_pace(pace)

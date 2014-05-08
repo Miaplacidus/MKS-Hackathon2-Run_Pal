@@ -79,7 +79,7 @@ shared_examples 'a database' do
       @circle = db.create_circle({name: "MakerSquare", admin_id: @user_objs[0].id, max_members: 30})
 
       posts = [
-        {creator_id: @user_objs[0].id, time: Time.now, location:[22, 33], pace: 2, notes:"Sunny day run!", complete:false, min_amt:10.50, age_pref: 0, gender_pref: 0, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil},
+        {creator_id: @user_objs[0].id, time: Time.now, location:[40, 51], pace: 2, notes:"Sunny day run!", complete:false, min_amt:10.50, age_pref: 0, gender_pref: 0, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil},
         {creator_id: @user_objs[1].id, time: Time.now, location:[44, 55], pace: 1, notes:"Let's go.", complete:false, min_amt:5.50, age_pref: 3, gender_pref: 1, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil},
         {creator_id: @user_objs[2].id, time: Time.now, location:[66, 77], pace: 7, notes:"Will be a fairly relaxed jog.", complete:true, min_amt:12.00, age_pref: 3, gender_pref: 1, committer_ids: [@user_objs[0].id, @user_objs[1].id], attend_ids: [@user_objs[0].id, @user_objs[1].id], circle_id: nil},
         {creator_id: @user_objs[3].id, time: Time.now, location:[88, 99], pace: 0, complete:false, min_amt:20.00, age_pref: 4, gender_pref: 0, committer_ids: [@user_objs[0].id, @user_objs[1].id, @user_objs[2].id, @user_objs[3].id], attend_ids: [@user_objs[1].id, @user_objs[3].id], circle_id: @circle.id},
@@ -160,25 +160,25 @@ shared_examples 'a database' do
       expect(db.get_post(post.id)).to eq(nil)
     end
 
-    xit "filters posts by age preference" do
+    it "filters posts by age preference" do
       result = db.posts_filter_age(3)
       result.count.should eql(2)
       result[1].age_pref.should eql(3)
     end
 
-    xit "filters posts by gender preference" do
+    it "filters posts by gender preference" do
       result = db.posts_filter_gender(0)
       result.count.should eql(2)
       result[1].gender_pref.should eql(0)
     end
 
-    xit "filters posts by location and search radius" do
-      result = db.posts_filter_location([44, 55])
-      result.count.should eql(1)
-      result[1].location.should eql("Austin")
+    it "filters posts by location and search radius" do
+      result = db.posts_filter_location([40,50], 10)
+      result.count.should eql(2)
+      expect(result.map &:notes).to include("Sunny day run!", "Let's go.")
     end
 
-    xit "filters posts by pace" do
+    it "filters posts by pace" do
       result = db.posts_filter_pace(2)
       result.count.should eql(1)
       result[0].notes.should eql("Sunny day run!")
