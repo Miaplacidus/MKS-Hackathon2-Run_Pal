@@ -173,9 +173,9 @@ shared_examples 'a database' do
     end
 
     it "filters posts by location and search radius" do
-      result = db.posts_filter_location([40,50], 10)
-      result.count.should eql(2)
-      expect(result.map &:notes).to include("Sunny day run!", "Let's go.")
+      result = db.posts_filter_location([44,55], 10)
+      result.count.should eql(1)
+      expect(result.map &:notes).to include("Let's go.")
     end
 
     it "filters posts by pace" do
@@ -292,6 +292,7 @@ shared_examples 'a database' do
     end
 
     xit "filters circles by location and search radius" do
+
     end
 
     it "updates a circle" do

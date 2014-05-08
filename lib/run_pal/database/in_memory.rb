@@ -230,11 +230,15 @@ module RunPal
         posts_with_correct_gender
       end
 
-      def posts_filter_location(location, radius)
+      def posts_filter_location(user_loc, radius)
+        mi_to_km = 1.60934
+        earth_radius = 6371
         post_arr = []
+        radius = radius * mi_to_km
         @posts.each do |pid, post|
           loc_arr = post.location
-          distance = Math.sqrt((location[0] - loc_arr[0])**2 + (location[1] - loc_arr[1])**2)
+          distance = Math.acos(Math.sin(user_loc[0]) * Math.sin(loc_arr[0]) + Math.cos(user_loc[0]) * Math.cos(loc_arr[0]) * Math.cos(loc_arr[1] - user_loc[1])) * earth_radius
+        # acos(sin(1.3963) * sin(Lat) + cos(1.3963) * cos(Lat) * cos(Lon - (-0.6981))) * 6371 <= 1000
           if distance <= radius
             post_arr << post
           end
