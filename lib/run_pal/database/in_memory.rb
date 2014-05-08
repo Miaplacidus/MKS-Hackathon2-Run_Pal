@@ -349,6 +349,7 @@ module RunPal
 
       def get_user(id)
         attrs = @users[id]
+        return nil if attrs.nil?
         RunPal::User.new(attrs)
       end
 
@@ -360,14 +361,10 @@ module RunPal
         users_arr
       end
 
-      def update_user(id, attrs)
-        if @users[id]
-          attrs.each do |key, value|
-            setter = "#{key}="
-            @users[id].send(setter, value) if @users[id].class.method_defined?(setter)
-          end
-        end
-        @users[id]
+      def update_user(user_id, attrs)
+        user_attrs = @users[user_id]
+        user_attrs.merge!(attrs)
+        RunPal::User.new(user_attrs)
       end
 
       def delete_user(id)
@@ -377,6 +374,7 @@ module RunPal
       def create_wallet(attrs)
         id = @wallet_id_counter+=1
         attrs[:id] = id
+        @wallets[id]
         RunPal::Wallet.new(attrs).tap{|wallet| @wallets[wallet.user_id] = wallet}
       end
 
