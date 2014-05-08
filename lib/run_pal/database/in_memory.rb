@@ -353,8 +353,11 @@ module RunPal
       end
 
       def all_users
-        @users.values
-
+        users_arr = []
+        @users.each do |uid, attrs|
+          users_arr << RunPal::User.new(attrs)
+        end
+        users_arr
       end
 
       def update_user(id, attrs)
