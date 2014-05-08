@@ -24,11 +24,15 @@ module RunPal
       def create_challenge(attrs)
         cid = @challenge_id_counter+=1
         pid = @post_id_counter+=1
-        attrs[:id] = pid
-        RunPal::Post.new(attrs).tap{|post| @posts[pid] = post}
+        post_attrs = attrs.clone
+        post_attrs[:id] = pid
+        RunPal::Post.new(attrs)
+        @posts[pid] = attrs
+
         attrs[:id] = cid
         attrs[:post_id] = pid
-        RunPal::Challenge.new(attrs).tap{|challenge| @challenges[cid] = challenge}
+        challenge = RunPal::Challenge.new(attrs).tap{|challenge| @challenges[cid] = challenge}
+        challenge
       end
 
       def get_challenge(id)
