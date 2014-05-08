@@ -189,7 +189,7 @@ shared_examples 'a database' do
       result[0].notes.should eql("Sunny day run!")
     end
 
-    xit "filters posts by time" do
+    it "filters posts by time" do
       result = db.posts_filter_time(@t_apr_first, @t_july_first)
       result.count.should eql(2)
       result[0].notes.should eql("Let's go.")

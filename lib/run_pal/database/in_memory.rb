@@ -318,10 +318,14 @@ module RunPal
       end
 
       def posts_filter_time(start_time, end_time)
-        post_objects = @posts.values
-        post_objects.select do |post|
-          start_time < post.time && post.time < end_time
+        post_arr = []
+        post_attributes = @posts.values
+        post_attributes.each do |attr_hash|
+          if start_time < attr_hash[:time] && attr_hash[:time] < end_time
+            post_arr << RunPal::Post.new(attr_hash)
+          end
         end
+        post_arr
       end
 
       # TEMPLATE
