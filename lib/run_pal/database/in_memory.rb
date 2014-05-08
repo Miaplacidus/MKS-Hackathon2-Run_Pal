@@ -26,7 +26,8 @@ module RunPal
         pid = @post_id_counter+=1
         post_attrs = attrs.clone
         post_attrs[:id] = pid
-        # Removing challenge-specific data from post_attrs
+
+        # Remove challenge-specific data from post_attrs
         post_attrs.delete_if do |name, value|
           setter = "#{name}="
           !RunPal::Post.method_defined?(setter)
@@ -51,11 +52,12 @@ module RunPal
 
       def get_circle_challenges(circle_id)
         challenge_arr = []
-        @challenges.each do |challenge|
-          if challenge.sender_id == circle_id || challenge.recipient_id == circle_id
-            challenge_arr << challenge
+        @challenges.each do |cid, attrs|
+          if attrs[:sender_id] == circle_id || attrs[:recipient_id] == circle_id
+            challenge_arr << RunPal::Challenge.new(attrs)
           end
         end
+        challenge_arr
       end
 
       def update_challenge(id, attrs)

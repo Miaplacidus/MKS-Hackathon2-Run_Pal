@@ -359,9 +359,9 @@ shared_examples 'a database' do
       @user_objs << db.create_user(info)
     end
 
-    circle1 = db.create_circle({name: "MakerSquare", admin_id: @user_objs[0].id, max_members: 30})
-    circle2 = db.create_circle({name: "Hack Reactor", admin_id: @user_objs[1].id, max_members: 25})
-    @challenge = db.create_challenge({name: "Monday Funday", sender_id: circle1.id, recipient_id: circle2.id, creator_id: circle1.admin_id, time: Time.now, location:[22, 33], pace: 1, notes:"Doom!", complete:false, min_amt:0, age_pref: 0, gender_pref: 0, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: circle1.id})
+    @circle1 = db.create_circle({name: "MakerSquare", admin_id: @user_objs[0].id, max_members: 30})
+    @circle2 = db.create_circle({name: "Hack Reactor", admin_id: @user_objs[1].id, max_members: 25})
+    @challenge = db.create_challenge({name: "Monday Funday", sender_id: @circle1.id, recipient_id: @circle2.id, creator_id: @circle1.admin_id, time: Time.now, location:[22, 33], pace: 1, notes:"Doom!", complete:false, min_amt:0, age_pref: 0, gender_pref: 0, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: @circle1.id})
     end
 
     it "creates a challenge with accepted set to default of false" do
@@ -384,6 +384,13 @@ shared_examples 'a database' do
     it "deletes a challenge" do
       db.delete_challenge(@challenge.id)
       expect(db.get_challenge(@challenge.id)).to eq(nil)
+    end
+
+    it "gets a challenge by sender or recipient ids" do
+      result = db.get_circle_challenges(@circle1.id)
+      expect(result[0].name).to eq("Monday Funday")
+      result = db.get_circle_challenges(@circle2.id)
+      expect(result[0].name).to eq("Monday Funday")
     end
   end
 
