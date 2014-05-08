@@ -264,8 +264,8 @@ shared_examples 'a database' do
         @user_objs << db.create_user(info)
     end
 
-    @circle1 = db.create_circle({name: "Silvercar", admin_id: @user_objs[1].id, max_members: 14, location:[32, 44]})
-    @circle2 = db.create_circle({name: "Crazy Apps", admin_id: @user_objs[2].id, max_members: 19, location: [22, 67]})
+    @circle1 = db.create_circle({name: "Silvercar", admin_id: @user_objs[1].id, max_members: 14, location:[32, 44], member_ids:[]})
+    @circle2 = db.create_circle({name: "Crazy Apps", admin_id: @user_objs[2].id, max_members: 19, location: [22, 67], member_ids:[]})
 
 
     posts = [
@@ -305,13 +305,13 @@ shared_examples 'a database' do
       expect(result.map &:name).to include("Silvercar")
     end
 
-    xit "updates a circle" do
+    it "updates a circle" do
       updated = db.update_circle(@circle1.id, {name:"Runner's World", max_members: 35})
       expect(updated.name).to eq("Runner's World")
       expect(updated.max_members).to eq(35)
     end
 
-    xit "filters out full circles" do
+    it "filters out full circles" do
       full_circle = db.create_circle({name: "ATX Runners", admin_id: @user_objs[1].id, max_members: 3, location:[32, 44], member_ids:[@user_objs[0], @user_objs[1], @user_objs[2]]})
       result = db.circles_filter_full
       expect(result.count).to eq(2)

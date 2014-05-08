@@ -153,22 +153,21 @@ module RunPal
 
       def circles_filter_full
         circle_arr = []
-        @circles.each do |cid, circle|
-          if circle.member_ids.length < circle.max_members
-            circle_arr << circle
+        circle_attributes = @circles.values
+        circle_attributes.each do |attr_hash|
+
+          if attr_hash[:member_ids].length < attr_hash[:max_members]
+            circle_arr << RunPal::Circle.new(attr_hash)
           end
+
         end
         circle_arr
       end
 
       def update_circle(id, attrs)
-        if @circles[id]
-          attrs.each do |key, value|
-            setter = "#{key}="
-            @circles[id].send(setter, value) if @circles[id].class.method_defined?(setter)
-          end
-        end
-        @circles[id]
+        circle_attrs = @circles[id]
+        circle_attrs.merge!(attrs)
+        RunPal::Circle.new(circle_attrs)
       end
 
       def create_commit(attrs)
@@ -200,29 +199,6 @@ module RunPal
         end
         @commits[id]
       end
-
-
-      # ^^^IFU^^^
-
-      # def create_post(attrs)
-      #   id = @post_id_counter+=1
-      #   attrs[:id] = id
-      #   RunPal::Post.new(attrs).tap{|post| @posts[id] = post}
-      # end
-
-      # @posts = {
-      #   1 => post_obj1,
-      #   2 => post_obj2
-      # }
-
-      # post = create_post(attrs) # id is 1, pace is 2
-      # retrieved_post = get_post(1)
-      # retrieved_post.pace # 2
-
-      # post.pace = 3 # same as doing post_obj1.pace = 3
-      # retrieved_post_2 = get_post(1)
-      # post.pace # 3
-      # # never had to run the update method to change the post attributes
 
       def create_post(attrs)
         id = @post_id_counter+=1
