@@ -129,22 +129,26 @@ module RunPal
 
 ##########################################################
       def all_circles
-        @circles.values
+        circle_arr = []
+        @circles.values.each do |attrs|
+          circle_arr << RunPal::Circle.new(attrs)
+        end
+        circle_arr
       end
 
       def circles_filter_location(user_loc, radius)
-         mi_to_km = 1.60934
+        mi_to_km = 1.60934
         earth_radius = 6371
-        post_arr = []
+        circle_arr = []
         radius = radius * mi_to_km
-        @circles.each do |cid, circle|
-          loc_arr = post.location
+        @circles.each do |cid, attrs|
+          loc_arr = attrs[:location]
           distance = Math.acos(Math.sin(user_loc[0]) * Math.sin(loc_arr[0]) + Math.cos(user_loc[0]) * Math.cos(loc_arr[0]) * Math.cos(loc_arr[1] - user_loc[1])) * earth_radius
           if distance <= radius
-            circle_arr << circle
+            circle_arr << RunPal::Circle.new(attrs)
           end
         end
-        circle
+        circle_arr
       end
 
       def circles_filter_full

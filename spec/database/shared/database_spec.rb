@@ -282,25 +282,27 @@ shared_examples 'a database' do
 
   end
 
-    xit "creates a circle" do
+    it "creates a circle" do
       expect(@circle1.name).to eq("Silvercar")
       expect(@circle1.max_members).to eq(14)
       expect(db.get_user(@circle1.admin_id).username).to eq("Runna Lot")
     end
 
-    xit "gets a circle" do
+    it "gets a circle" do
       circle = db.get_circle(@circle2.id)
       expect(circle.name).to eq("Crazy Apps")
     end
 
-    xit "gets all circles" do
+    it "gets all circles" do
       circles = db.all_circles
       expect(circles.count).to eq(2)
       expect(circles.map &:max_members).to include(14, 19)
     end
 
-    xit "filters circles by location and search radius" do
-
+    it "filters circles by location and search radius" do
+      result = db.circles_filter_location([32,44], 10)
+      result.count.should eql(1)
+      expect(result.map &:name).to include("Silvercar")
     end
 
     xit "updates a circle" do
@@ -364,24 +366,24 @@ shared_examples 'a database' do
     @challenge = db.create_challenge({name: "Monday Funday", sender_id: @circle1.id, recipient_id: @circle2.id, creator_id: @circle1.admin_id, time: Time.now, location:[22, 33], pace: 1, notes:"Doom!", complete:false, min_amt:0, age_pref: 0, gender_pref: 0, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: @circle1.id})
     end
 
-    xit "creates a challenge with accepted set to default of false" do
+    it "creates a challenge with accepted set to default of false" do
     expect(@challenge.name).to eq("Monday Funday")
     expect(db.get_post(@challenge.post_id).notes).to eq("Doom!")
     end
 
-    xit "gets a challenge" do
+    it "gets a challenge" do
       challenge = db.get_challenge(@challenge.id)
       expect(challenge.name).to eq("Monday Funday")
     end
 
-    xit "updates a challenge" do
+    it "updates a challenge" do
     # add time tests
       updated = db.update_challenge(@challenge.id, {name:"Go HAM", location:[33, 44]})
       expect(updated.name).to eq("Go HAM")
       expect(db.get_post(updated.post_id).location).to include(33, 44)
     end
 
-    xit "deletes a challenge" do
+    it "deletes a challenge" do
       db.delete_challenge(@challenge.id)
       expect(db.get_challenge(@challenge.id)).to eq(nil)
     end
