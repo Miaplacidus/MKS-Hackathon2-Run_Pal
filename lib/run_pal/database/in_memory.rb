@@ -325,22 +325,22 @@ module RunPal
 
       def get_user(id)
         attrs = @users[id]
+        return nil if attrs.nil?
         RunPal::User.new(attrs)
       end
 
       def all_users
-        @users.values
-
+        users_arr = []
+        @users.each do |uid, attrs|
+          users_arr << RunPal::User.new(attrs)
+        end
+        users_arr
       end
 
-      def update_user(id, attrs)
-        if @users[id]
-          attrs.each do |key, value|
-            setter = "#{key}="
-            @users[id].send(setter, value) if @users[id].class.method_defined?(setter)
-          end
-        end
-        @users[id]
+      def update_user(user_id, attrs)
+        user_attrs = @users[user_id]
+        user_attrs.merge!(attrs)
+        RunPal::User.new(user_attrs)
       end
 
       def delete_user(id)
@@ -350,21 +350,24 @@ module RunPal
       def create_wallet(attrs)
         id = @wallet_id_counter+=1
         attrs[:id] = id
-        RunPal::Wallet.new(attrs).tap{|wallet| @wallets[wallet.user_id] = wallet}
+        @wallets[id] = attrs
+        RunPal::Wallet.new(attrs)
       end
 
-      def get_wallet(user_id)
-        @wallets[user_id]
+      def get_wallet_by_userid(user_id)
+        attrs = @users[user_id]
+        user = RunPal::User.new(attrs)
+        wallet_attrs = @wallets[user.id]
+        return nil if wallet_attrs.nil?
+        wallet = RunPal::Wallet.new(wallet_attrs)
       end
 
       def update_wallet(user_id, attrs)
-         if @wallets[user_id]
-          attrs.each do |key, value|
-            setter = "#{key}="
-            @wallets[user_id].send(setter, value) if @wallets[user_id].class.method_defined?(setter)
-          end
-        end
-        @wallets[user_id]
+        user_attrs = @users[user_id]
+        user = RunPal::User.new(user_attrs)
+        wallet_attrs = @wallets[user.id]
+        wallet_attrs.merge!(attrs)
+        RunPal::Wallet.new(wallet_attrs)
       end
 
       def delete_wallet(user_id)
