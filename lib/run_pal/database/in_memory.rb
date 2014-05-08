@@ -333,14 +333,24 @@ module RunPal
         end
       end
 
+      # TEMPLATE
+      # def create_post(attrs)
+      #   id = @post_id_counter+=1
+      #   attrs[:id] = id
+      #   @posts[id] = attrs
+      #   RunPal::Post.new(attrs)
+      # end
+
       def create_user(attrs)
         id = @user_id_counter+=1
         attrs[:id] = id
-        RunPal::User.new(attrs).tap{|user| @users[id] = user}
+        @users[id] = attrs
+        RunPal::User.new(attrs)
       end
 
       def get_user(id)
-        @users[id]
+        attrs = @users[id]
+        RunPal::User.new(attrs)
       end
 
       def all_users
