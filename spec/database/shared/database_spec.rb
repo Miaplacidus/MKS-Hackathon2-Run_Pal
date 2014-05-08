@@ -326,24 +326,24 @@ shared_examples 'a database' do
         @wallet = db.create_wallet({user_id: @user.id, balance: 20.00})
     end
 
-    xit "creates a wallet" do
+    it "creates a wallet" do
         expect(db.get_user(@wallet.user_id).username).to eq("Usain Bolt")
     end
 
-    xit "gets a wallet" do
-        result = db.get_wallet(@user.id)
+    it "gets a wallet" do
+        result = db.get_wallet_by_userid(@user.id)
         expect(result.balance).to eq(20.00)
     end
 
-    xit "updates a wallet" do
+    it "updates a wallet" do
       updated = db.update_wallet(@user.id, {balance: 30.00})
       expect(db.get_user(updated.user_id).username).to eq("Usain Bolt")
       expect(updated.balance).to eq(30.00)
     end
 
-    xit "deletes a wallet" do
+    it "deletes a wallet" do
         db.delete_wallet(@user.id)
-        result = db.get_wallet(@user.id)
+        result = db.get_wallet_by_userid(@user.id)
         result.should be_nil
     end
   end

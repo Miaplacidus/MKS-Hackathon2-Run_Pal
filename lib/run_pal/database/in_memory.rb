@@ -374,22 +374,20 @@ module RunPal
       def create_wallet(attrs)
         id = @wallet_id_counter+=1
         attrs[:id] = id
-        @wallets[id]
-        RunPal::Wallet.new(attrs).tap{|wallet| @wallets[wallet.user_id] = wallet}
+        @wallets[id] = attrs
+        RunPal::Wallet.new(attrs)
       end
 
-      def get_wallet(user_id)
-        @wallets[user_id]
+      def get_wallet_by_userid(user_id)
+        attrs = @users[user_id]
+        return nil if attrs.nil?
+        user = RunPal::User.new(attrs)
+        wallet_attrs = @wallets[user.id]
+        wallet = RunPal::Wallet.new(wallet_attrs)
       end
 
       def update_wallet(user_id, attrs)
-         if @wallets[user_id]
-          attrs.each do |key, value|
-            setter = "#{key}="
-            @wallets[user_id].send(setter, value) if @wallets[user_id].class.method_defined?(setter)
-          end
-        end
-        @wallets[user_id]
+
       end
 
       def delete_wallet(user_id)
