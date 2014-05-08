@@ -195,12 +195,57 @@ module RunPal
         @commits[id]
       end
 
+
+      # ^^^IFU^^^
+
+      # TEMPLATE
+      # def create_circle(attrs)
+      #   id = @circle_id_counter+=1
+      #   attrs[:id] = id
+      #   circle = RunPal::Circle.new(attrs)
+      #   @circles[id] = attrs
+      #   circle
+      # end
+      # binding.pry
+      # def create_post(attrs)
+      #   id = @post_id_counter+=1
+      #   attrs[:id] = id
+      #   RunPal::Post.new(attrs).tap{|post| @posts[id] = post}
+      # end
+
+      # @posts = {
+      #   1 => post_obj1,
+      #   2 => post_obj2
+      # }
+
+      # post = create_post(attrs) # id is 1, pace is 2
+      # retrieved_post = get_post(1)
+      # retrieved_post.pace # 2
+
+      # post.pace = 3 # same as doing post_obj1.pace = 3
+      # retrieved_post_2 = get_post(1)
+      # post.pace # 3
+      # # never had to run the update method to change the post attributes
+
       def create_post(attrs)
         id = @post_id_counter+=1
         attrs[:id] = id
         @posts[id] = attrs
         RunPal::Post.new(attrs)
       end
+
+      # @posts = {
+      #   1 => post_obj1_attrs_hash,
+      #   2 => post_obj2_attrs_hash
+      # }
+
+      # post = create_post(attrs) # id is 1, pace is 2
+      # retrieved_post = get_post(1)
+      # retrieved_post.pace # 2
+
+      # post.pace = 3
+      # retrieved_post_2 = get_post(1)
+      # post.pace # 2
 
       def get_post(id)
         attrs = @posts[id]
@@ -232,13 +277,8 @@ module RunPal
       end
 
       def update_post(id, attrs)
-        if @posts[id]
-          attrs.each do |key, value|
-            setter = "#{key}="
-            @posts[id].send(setter, value) if @posts[id].class.method_defined?(setter)
-          end
-        end
-        @posts[id]
+        post_attrs = @posts[id]
+        post_attrs.merge!(attrs)
       end
 
       def delete_post(id)
