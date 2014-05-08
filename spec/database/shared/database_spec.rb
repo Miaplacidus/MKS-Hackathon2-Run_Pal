@@ -97,7 +97,7 @@ shared_examples 'a database' do
 
     end
 
-    it "creates a post" do
+    xit "creates a post" do
       post = @post_objs[0]
       expect((db.get_user(post.creator_id)).username).to eq("Fast Feet")
       # expect(post.time).to eq()
@@ -107,20 +107,20 @@ shared_examples 'a database' do
       expect(post.circle_id).to eq(nil)
     end
 
-    it "creates a post associated with a circle" do
+    xit "creates a post associated with a circle" do
       post = @post_objs[3]
       circleID = post.circle_id
       expect((db.get_circle(circleID)).name).to eq("MakerSquare")
       expect((db.get_circle(circleID)).max_members).to eq(30)
     end
 
-    it "gets all posts associated with a circle" do
+    xit "gets all posts associated with a circle" do
       post_arr = db.get_circle_posts(@circle.id)
       expect(post_arr.count).to eq(1)
       expect(post_arr[0].age_pref).to eq(4)
     end
 
-    it "gets a post" do
+    xit "gets a post" do
       post = @post_objs[2]
       result = db.get_post(post.id)
       expect(result.notes).to eq("Will be a fairly relaxed jog.")
@@ -129,27 +129,27 @@ shared_examples 'a database' do
       expect(result.min_amt).to eq(12.00)
     end
 
-    it "gets all people committed to a run" do
+    xit "gets all people committed to a run" do
       post = @post_objs[2]
       committers = db.get_committed_users(post.id)
       expect(committers.count).to eq(2)
       expect(db.get_user(committers[1]).username).to eq("Runna Lot")
     end
 
-    it "gets all people who attended a run" do
+    xit "gets all people who attended a run" do
       post = @post_objs[3]
       attendees = db.get_attendees(post.id)
       expect(attendees.count).to eq(2)
       expect(db.get_user(attendees[1]).username).to eq("Nee Upp")
     end
 
-    it "gets all posts" do
+    xit "gets all posts" do
       result = db.all_posts
       result.count.should eql(4)
       expect(result.map &:gender_pref).to include(0, 1)
     end
 
-    it "updates posts" do
+    xit "updates posts" do
       # UPDATE TIME AS WELL
       post = @post_objs[1]
       result = db.update_post(post.id, {age_pref: 4, pace: 3, attend_ids: [@user_objs[0].id, @user_objs[1].id]})
@@ -159,37 +159,37 @@ shared_examples 'a database' do
       expect(db.get_user(result.attend_ids[0]).username).to eq("Fast Feet")
     end
 
-    it "deletes posts" do
+    xit "deletes posts" do
       post = @post_objs[1]
       db.delete_post(post.id)
       expect(db.get_post(post.id)).to eq(nil)
     end
 
-    it "filters posts by age preference" do
+    xit "filters posts by age preference" do
       result = db.posts_filter_age(3)
       result.count.should eql(2)
       result[1].age_pref.should eql(3)
     end
 
-    it "filters posts by gender preference" do
+    xit "filters posts by gender preference" do
       result = db.posts_filter_gender(0)
       result.count.should eql(2)
       result[1].gender_pref.should eql(0)
     end
 
-    it "filters posts by location and search radius" do
+    xit "filters posts by location and search radius" do
       result = db.posts_filter_location([44,55], 10)
       result.count.should eql(1)
       expect(result.map &:notes).to include("Let's go.")
     end
 
-    it "filters posts by pace" do
+    xit "filters posts by pace" do
       result = db.posts_filter_pace(2)
       result.count.should eql(1)
       result[0].notes.should eql("Sunny day run!")
     end
 
-    it "filters posts by time" do
+    xit "filters posts by time" do
       result = db.posts_filter_time(@t_apr_first, @t_july_first)
       result.count.should eql(2)
       result[0].notes.should eql("Let's go.")
@@ -223,26 +223,26 @@ shared_examples 'a database' do
       @commit2 = db.create_commit({user_id: @user_objs[1].id, post_id: @post_objs[1].id, amount: 5, fulfilled: true})
     end
 
-    it "creates a commitment with fulfilled set to false" do
+    xit "creates a commitment with fulfilled set to false" do
       expect(db.get_user(@commit1.user_id).username).to eq("Fast Feet")
       expect(db.get_post(@commit1.post_id).pace).to eq(2)
       expect(@commit1.fulfilled).to eq(false)
       # call .last on the end keyword
     end
 
-    it "gets a commitment" do
+    xit "gets a commitment" do
       commit = db.get_commit(@commit1.id)
       expect(commit.amount).to eq(3)
     end
 
-    it "gets commitments by user_id" do
+    xit "gets commitments by user_id" do
       commits_arr = db.get_user_commit(@user_objs[1].id)
       expect(commits_arr.count).to eq(1)
       expect(commits_arr[0].fulfilled).to eq(true)
       expect(commits_arr[0].amount).to eq(5)
     end
 
-    it "updates a commitment" do
+    xit "updates a commitment" do
       commit = db.update_commit(@commit1.id, {amount: 10})
       expect(commit.amount).to eq(10)
     end
@@ -282,13 +282,13 @@ shared_examples 'a database' do
 
   end
 
-    it "creates a circle" do
+    xit "creates a circle" do
       expect(@circle1.name).to eq("Silvercar")
       expect(@circle1.max_members).to eq(14)
       expect(db.get_user(@circle1.admin_id).username).to eq("Runna Lot")
     end
 
-    it "gets a circle" do
+    xit "gets a circle" do
       circle = db.get_circle(@circle2.id)
       expect(circle.name).to eq("Crazy Apps")
     end
@@ -324,22 +324,22 @@ shared_examples 'a database' do
         @wallet = db.create_wallet({user_id: @user.id, balance: 20.00})
     end
 
-    it "creates a wallet" do
+    xit "creates a wallet" do
         expect(db.get_user(@wallet.user_id).username).to eq("Usain Bolt")
     end
 
-    it "gets a wallet" do
+    xit "gets a wallet" do
         result = db.get_wallet(@user.id)
         expect(result.balance).to eq(20.00)
     end
 
-    it "updates a wallet" do
+    xit "updates a wallet" do
       updated = db.update_wallet(@user.id, {balance: 30.00})
       expect(db.get_user(updated.user_id).username).to eq("Usain Bolt")
       expect(updated.balance).to eq(30.00)
     end
 
-    it "deletes a wallet" do
+    xit "deletes a wallet" do
         db.delete_wallet(@user.id)
         result = db.get_wallet(@user.id)
         result.should be_nil
@@ -364,24 +364,24 @@ shared_examples 'a database' do
     @challenge = db.create_challenge({name: "Monday Funday", sender_id: circle1.id, recipient_id: circle2.id, creator_id: circle1.admin_id, time: Time.now, location:[22, 33], pace: 1, notes:"Doom!", complete:false, min_amt:0, age_pref: 0, gender_pref: 0, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: circle1.id})
     end
 
-    it "creates a challenge with accepted set to default of false" do
+    xit "creates a challenge with accepted set to default of false" do
     expect(@challenge.name).to eq("Monday Funday")
     expect(db.get_post(@challenge.post_id).notes).to eq("Doom!")
     end
 
-    it "gets a challenge" do
+    xit "gets a challenge" do
       challenge = db.get_challenge(@challenge.id)
       expect(challenge.name).to eq("Monday Funday")
     end
 
-    it "updates a challenge" do
+    xit "updates a challenge" do
     # add time tests
       updated = db.update_challenge(@challenge.id, {name:"Go HAM", location:[33, 44]})
       expect(updated.name).to eq("Go HAM")
       expect(db.get_post(updated.post_id).location).to include(33, 44)
     end
 
-    it "deletes a challenge" do
+    xit "deletes a challenge" do
       db.delete_challenge(@challenge.id)
       expect(db.get_challenge(@challenge.id)).to eq(nil)
     end
