@@ -293,6 +293,13 @@ shared_examples 'a database' do
       expect(circle.name).to eq("Crazy Apps")
     end
 
+    it "gets the names of all circles" do
+      name_hash = db.get_circle_names
+      expect(name_hash.length).to eq(2)
+      expect(name_hash["Silvercar"]).to eq(true)
+      expect(name_hash["Crazy Apps"]).to eq(true)
+    end
+
     it "gets all circles" do
       circles = db.all_circles
       expect(circles.count).to eq(2)

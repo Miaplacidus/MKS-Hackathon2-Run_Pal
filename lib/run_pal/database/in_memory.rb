@@ -96,7 +96,15 @@ module RunPal
       end
 
       def get_circle(id)
-        circle = @circles[id] ? RunPal::Circle.new(@challenges[id]) : nil
+        circle = @circles[id] ? RunPal::Circle.new(@circles[id]) : nil
+      end
+
+      def get_circle_names
+        name_hash = {}
+        @circles.each do |cid, attrs|
+          name_hash[attrs[:name]] = true
+        end
+        name_hash
       end
 
       def all_circles
