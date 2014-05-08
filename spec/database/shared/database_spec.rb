@@ -236,7 +236,7 @@ shared_examples 'a database' do
     end
 
     it "gets commitments by user_id" do
-      commits_arr = db.get_user_commit(@user_objs[1].id)
+      commits_arr = db.get_commits_by_user(@user_objs[1].id)
       expect(commits_arr.count).to eq(1)
       expect(commits_arr[0].fulfilled).to eq(true)
       expect(commits_arr[0].amount).to eq(5)
