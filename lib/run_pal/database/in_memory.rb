@@ -26,17 +26,27 @@ module RunPal
         pid = @post_id_counter+=1
         post_attrs = attrs.clone
         post_attrs[:id] = pid
-        RunPal::Post.new(attrs)
-        @posts[pid] = attrs
+        # Removing challenge-specific data from post_attrs
+        post_attrs.delete_if do |name, value|
+          setter = "#{name}="
+          !RunPal::Post.method_defined?(setter)
+        end
+        @posts[pid] = post_attrs
+        RunPal::Post.new(post_attrs)
 
+        # Remove post-specific data from attrs
         attrs[:id] = cid
         attrs[:post_id] = pid
-        challenge = RunPal::Challenge.new(attrs).tap{|challenge| @challenges[cid] = challenge}
-        challenge
+        attrs.delete_if do |name, value|
+          setter = "#{name}"
+          !RunPal::Challenge.method_defined?(setter)
+        end
+        @challenges[cid] = attrs
+        challenge = RunPal::Challenge.new(attrs)
       end
 
       def get_challenge(id)
-        @challenges[id]
+        challenge = RunPal::Challenge.new(@challenges[id])
       end
 
       def get_circle_challenges(circle_id)
@@ -209,8 +219,7 @@ module RunPal
         id = @post_id_counter+=1
         attrs[:id] = id
         @posts[id] = attrs
-        post = RunPal::Post.new(attrs)
-        post
+        RunPal::Post.new(attrs)
       end
 
       # @posts = {
@@ -227,8 +236,8 @@ module RunPal
       # post.pace # 2
 
       def get_post(id)
-        post_attrs = @posts[id]
-        Post.new(post_attrs)
+        attrs = @posts[id]
+        RunPal::Post.new(attrs)
       end
 
       def get_circle_posts(circle_id)
