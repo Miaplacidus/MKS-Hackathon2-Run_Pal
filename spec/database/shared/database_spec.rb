@@ -10,18 +10,17 @@ shared_examples 'a database' do
   describe 'Users' do
 
     before :each do
-        users = [
-          {username: "Fast Feet", gender: 1, email:"marathons@speed.com", password:"abc123", bday:"2/8/1987"},
-          {username: "Runna Lot", gender: 2, email:"jogger@run.com", password:"111222", bday:"6/6/1966"},
-          {username: "Jon Jones", gender: 2, email:"runlikemad@sprinter.com", password:"aabbcc", bday:"3/14/1988"},
-          {username: "Nee Upp", gender: 1, email:"sofast@runna.com", password: "123abc", bday: "5/15/1994"}
-        ]
+      users = [
+        {username: "Fast Feet", gender: 1, email:"marathons@speed.com", password:"abc123", bday:"2/8/1987"},
+        {username: "Runna Lot", gender: 2, email:"jogger@run.com", password:"111222", bday:"6/6/1966"},
+        {username: "Jon Jones", gender: 2, email:"runlikemad@sprinter.com", password:"aabbcc", bday:"3/14/1988"},
+        {username: "Nee Upp", gender: 1, email:"sofast@runna.com", password: "123abc", bday: "5/15/1994"}
+      ]
 
-        @user_objs = []
-        users.each do |info|
-            @user_objs << db.create_user(info)
-        end
-
+      @user_objs = []
+      users.each do |info|
+          @user_objs << db.create_user(info)
+      end
     end
 
     it "creates a user" do
@@ -76,7 +75,7 @@ shared_examples 'a database' do
           @user_objs << db.create_user(info)
       end
 
-      @circle = db.create_circle({name: "MakerSquare", admin_id: @user_objs[0].id, max_members: 30})
+      @circle = db.create_circle({name: "MakerSquare", admin_id: @user_objs[0].id, max_members: 30, member_ids: []})
 
       @t_apr_first = Time.parse("Apr 1 2014")
       @t_may_first = Time.parse("May 1 2014")
@@ -266,7 +265,6 @@ shared_examples 'a database' do
 
     @circle1 = db.create_circle({name: "Silvercar", admin_id: @user_objs[1].id, max_members: 14, location:[32, 44], member_ids:[]})
     @circle2 = db.create_circle({name: "Crazy Apps", admin_id: @user_objs[2].id, max_members: 19, location: [22, 67], member_ids:[]})
-
 
     posts = [
       {creator_id: @user_objs[0].id, time: Time.now, location:[22, 33], pace: 2, notes:"Sunny day run!", complete:false, min_amt:10.50, age_pref: 0, gender_pref: 0, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil},

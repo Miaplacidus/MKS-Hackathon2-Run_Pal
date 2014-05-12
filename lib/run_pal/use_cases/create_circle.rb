@@ -2,32 +2,23 @@ module RunPal
   class CreateCircle < UseCase
 
     def run(inputs)
-
-      user = RunPal.db.get_user(inputs[:admin_id])
+      user = RunPal.db.get_user(inputs[:admin_id].to_i)
       return failure (:user_does_not_exist) if user.nil?
 
-      circle = RunPal.db.get_circle(inputs[:circle_id])
-      # task = TM.db.get_task(inputs[:task_id].to_i)
-      # return failure(:task_does_not_exist) if task.nil?
+      names_hash = RunPal.db.get_circle_names
+      return failure(:name_taken) if names_hash[inputs[:name]]
 
-      # emp = TM.db.get_emp(inputs[:employee_id].to_i)
-      # return failure(:employee_does_not_exist) if emp.nil?
+      circle = create_new_circle(inputs)
+      return failure(:invalid_input) if !circle.valid?
 
-      # proj = TM.db.get_project(task.projID)
-      # return failure(:employee_not_assigned_to_proj) if proj.emp_ids[emp.id].nil?
+      success :circle => circle
 
-      # add_employee_to_task(emp, task)
-
-      # # Return a success with relevant data
-      # success :task => task, :employee => emp
+      # IMPLEMENT USE CASE TO PREVENT USER FROM CREATING A CIRCLE
+      # IN A TOWN WHERE THEY ARE NOT CURRENTLY LOCATED
     end
 
-    def create_circle(emp, task)
-      # NOT SHOWN: Modify task to assign to employee
-      # ...
-
-      # TM.db.update_task(task.id, {eid: emp.id})
-      # {success?: true, task: task}
+    def create_new_circle(attrs)
+      RunPal.db.create_circle(attrs)
     end
 
   end

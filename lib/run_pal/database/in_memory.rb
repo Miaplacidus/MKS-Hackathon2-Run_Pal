@@ -13,12 +13,12 @@ module RunPal
         @post_id_counter = 0
         @user_id_counter = 0
         @wallet_id_counter = 0
-        @challenges = {} #Key: challenge_id, Value: challenge_obj
-        @circles = {} # Key: circle_id, Value: circle_obj
-        @commits = {} # Key: commit_id, Value:
-        @posts = {} # Key: post_id, Value: post_obj
-        @users = {} # Key: user_id, Value: user_obj
-        @wallets = {} # Key: user_id, Value: wallet_obj
+        @challenges = {} #Key: challenge_id, Value: challenge_obj_attrs
+        @circles = {} # Key: circle_id, Value: circle_obj_attrs
+        @commits = {} # Key: commit_id, Value: commit_obj_attrs
+        @posts = {} # Key: post_id, Value: post_obj_attrs
+        @users = {} # Key: user_id, Value: user_obj_attrs
+        @wallets = {} # Key: user_id, Value: wallet_obj_attrs
       end
 
       def create_challenge(attrs)
@@ -284,14 +284,6 @@ module RunPal
         end
         post_arr
       end
-
-      # TEMPLATE
-      # def create_post(attrs)
-      #   id = @post_id_counter+=1
-      #   attrs[:id] = id
-      #   @posts[id] = attrs
-      #   RunPal::Post.new(attrs)
-      # end
 
       def create_user(attrs)
         id = @user_id_counter+=1

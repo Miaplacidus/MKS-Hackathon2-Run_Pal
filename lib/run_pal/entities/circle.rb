@@ -7,6 +7,7 @@ module RunPal
 
     def initialize(attrs={})
       @member_ids = []
+      @post_ids = []
       super
     end
   end
