@@ -2,7 +2,9 @@ module RunPal
   class CreateCircle < UseCase
 
     def run(inputs)
-      user = RunPal.db.get_user(inputs[:admin_id].to_i)
+      inputs[:creator_id] = inputs[:creator_id].to_i
+
+      user = RunPal.db.get_user(inputs[:admin_id])
       return failure (:user_does_not_exist) if user.nil?
 
       names_hash = RunPal.db.get_circle_names
@@ -12,7 +14,6 @@ module RunPal
       return failure(:invalid_input) if !circle.valid?
 
       success :circle => circle
-
       # IMPLEMENT USE CASE TO PREVENT USER FROM CREATING A CIRCLE
       # IN A TOWN WHERE THEY ARE NOT CURRENTLY LOCATED
     end

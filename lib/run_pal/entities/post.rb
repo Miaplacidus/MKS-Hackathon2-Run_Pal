@@ -1,12 +1,13 @@
 module RunPal
   class Post < Entity
     attr_accessor :id, :creator_id, :time, :location, :pace, :notes, :complete, :min_amt
-    attr_accessor :age_pref, :gender_pref, :committer_ids, :attend_ids, :circle_id
+    attr_accessor :age_pref, :gender_pref, :committer_ids, :attend_ids, :circle_id, :max_runners
     # committer_ids: array
+    # when created, committer ids will first include the creator's id
     # attend_ids: array
     #location: [lat: number, long: number]
     validates_presence_of :creator_id, :time, :location, :pace, :min_amt
-    validates_presence_of :age_pref, :gender_pref, :committer_ids
+    validates_presence_of :age_pref, :gender_pref, :committer_ids, :max_runners
 
     def initialize(attrs={})
       @notes = ""
