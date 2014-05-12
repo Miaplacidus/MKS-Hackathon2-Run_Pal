@@ -11,7 +11,7 @@ module RunPal
       recipient_id = RunPal.db.get_circle(inputs[:recipient_id].to_i)
       return failure (:circle_does_not_exist) if recipient_id.nil?
 
-      inputs[:name] = inputs[:name].to_i
+      inputs[:name] = inputs[:name].to_s
       inputs[:sender_id] = inputs[:sender_id].to_i
       inputs[:recipient_id] = inputs[:recipient_id].to_i
       inputs[:post_id] = inputs[:post_id].to_i
