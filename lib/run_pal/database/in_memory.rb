@@ -339,6 +339,11 @@ module RunPal
         RunPal::Wallet.new(wallet_attrs)
       end
 
+      # def new_update_wallet(user_id, transaction)
+      #   wallet = get_wallet(user_id)
+      #   wallet.balance += transaction
+      # end
+
       def delete_wallet(user_id)
         @wallets.delete(user_id)
       end

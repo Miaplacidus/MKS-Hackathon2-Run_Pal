@@ -11,13 +11,12 @@ module RunPal
       inputs[:age_pref] = inputs[:age_pref].to_i
       inputs[:gender_pref] = inputs[:gender_pref].to_i
       inputs[:circle_id] = inputs[:circle_id].to_i if inputs[:circle_id]
+      inputs[:max_runners] = inputs[:max_runners].to_i
 
       post = create_new_post(inputs)
       return failure(:invalid_input) if !post.valid?
 
       success :post => post
-      # IMPLEMENT USE CASE TO PREVENT USER FROM CREATING A CIRCLE
-      # IN A TOWN WHERE THEY ARE NOT CURRENTLY LOCATED
     end
 
     def create_new_post(attrs)
