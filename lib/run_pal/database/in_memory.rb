@@ -145,7 +145,11 @@ module RunPal
 
       def update_circle(id, attrs)
         circle_attrs = @circles[id]
+        circle_members = circle_attrs[:member_ids]
         circle_attrs.merge!(attrs)
+        if attrs[:member_ids]
+          circle_attrs[:member_ids] += circle_members
+        end
         RunPal::Circle.new(circle_attrs)
       end
 
