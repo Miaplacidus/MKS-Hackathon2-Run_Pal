@@ -302,6 +302,16 @@ module RunPal
         RunPal::User.new(attrs)
       end
 
+      def get_user_by_email(email)
+        check = nil
+        @users.each do |user_id, attrs|
+          if attrs[:email] == email
+            check = attrs
+          end
+        end
+        return check
+      end
+
       def all_users
         users_arr = []
         @users.each do |uid, attrs|
