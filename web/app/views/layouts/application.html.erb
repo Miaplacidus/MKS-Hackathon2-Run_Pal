@@ -2,10 +2,20 @@
 <html>
 <head>
   <title>Web</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag 'application', media: 'all' %>
   <%= csrf_meta_tags %>
+  <!-- HOME PAGE VIDEO PLAYER DEPENDENCIES || http://dfcb.github.io/BigVideo.js/ -->
+  <link rel="stylesheet" href="http://dfcb.github.io/BigVideo.js/bower_components/BigVideo/css/bigvideo.css">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="bower_components/jquery/jquery.min.js"><\/script>')</script>
+  <script src="http://dfcb.github.io/BigVideo.js/bower_components/jquery-ui/ui/jquery-ui.js"></script>
+  <script src="http://dfcb.github.io/BigVideo.js/bower_components/jquery-ui/ui/minified/jquery-ui.min.js"></script>
+
+  <!-- VIDEO PLAYER DEPENDCIES || http://dfcb.github.io/BigVideo.js/ -->
+  <script src="http://vjs.zencdn.net/4.3/video.js"></script>
+  <script src="http://dfcb.github.io/BigVideo.js/bower_components/BigVideo/lib/bigvideo.js"></script>
 </head>
+
 <body>
 
 <div id="user-auth">

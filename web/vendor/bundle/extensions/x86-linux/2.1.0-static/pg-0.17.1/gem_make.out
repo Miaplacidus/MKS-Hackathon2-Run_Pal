@@ -37,21 +37,17 @@ creating extconf.h
 creating Makefile
 
 make "DESTDIR=" clean
-make: Warning: File `Makefile' has modification time 7.5e+02 s in the future
-make: warning:  Clock skew detected.  Your build may be incomplete.
 
 make "DESTDIR="
-make: Warning: File `Makefile' has modification time 7.5e+02 s in the future
 compiling gvl_wrappers.c
 compiling pg.c
 compiling pg_connection.c
 compiling pg_errors.c
 compiling pg_result.c
 linking shared-object pg_ext.so
-make: warning:  Clock skew detected.  Your build may be incomplete.
 
 make "DESTDIR=" install
-make: Warning: File `Makefile' has modification time 7.5e+02 s in the future
-/usr/bin//install -c -m 0755 pg_ext.so ./.gem.20140513-22962-7okj97
+make: Warning: File `pg_ext.so' has modification time 0.053 s in the future
+/usr/bin//install -c -m 0755 pg_ext.so ./.gem.20140516-4768-ccvhn0
 installing default pg_ext libraries
 make: warning:  Clock skew detected.  Your build may be incomplete.
