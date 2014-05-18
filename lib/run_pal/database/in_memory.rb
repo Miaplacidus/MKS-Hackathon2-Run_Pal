@@ -13,12 +13,12 @@ module RunPal
         @post_id_counter = 0
         @user_id_counter = 0
         @wallet_id_counter = 0
-        @challenges = {} #Key: challenge_id, Value: challenge_obj_attrs
-        @circles = {} # Key: circle_id, Value: circle_obj_attrs
-        @commits = {} # Key: commit_id, Value: commit_obj_attrs
-        @posts = {} # Key: post_id, Value: post_obj_attrs
-        @users = {} # Key: user_id, Value: user_obj_attrs
-        @wallets = {} # Key: user_id, Value: wallet_obj_attrs
+        @challenges = {} #Key: challenge_id, Value: challenge_obj_attrs hash
+        @circles = {} # Key: circle_id, Value: circle_obj_attrs hash
+        @commits = {} # Key: commit_id, Value: commit_obj_attrs hash
+        @posts = {} # Key: post_id, Value: post_obj_attrs hash
+        @users = {} # Key: user_id, Value: user_obj_attrs hash
+        @wallets = {} # Key: user_id, Value: wallet_obj_attrs hash
       end
 
       def create_challenge(attrs)
@@ -328,6 +328,27 @@ module RunPal
 
       def delete_user(id)
         @users.delete(id)
+      end
+
+      def from_omniauth(auth)
+        gender = 0
+        if auth.extra.raw_info.gender == 'female'
+          gender = 1
+        elsif auth.extra.raw_info.gender == 'male'
+          gender = 2
+        end
+
+        user_attrs = @users.values
+        user = user_attrs.select{|attr_hash| attr_hash[:provider] == auth.provider && attr_hash[:fbid] == auth.uid}
+        user = user[0]
+
+        if user == nil
+          user = create_user({username: auth.info.first_name, email: auth.info.email, gender: gender, bday: auth.extra.raw_info.birthday, fbid: auth.uid, oauth_token: auth.credentials.token, oauth_expires_at: Time.at(auth.credentials.expires_at) })
+        else
+          user = update_user(user_attrs[:id], {username: auth.info.first_name, email: auth.info.email, gender: gender, bday: auth.extra.raw_info.birthday, fbid: auth.uid, oauth_token: auth.credentials.token, oauth_expires_at: Time.at(auth.credentials.expires_at)})
+        end
+
+        user
       end
 
       def create_wallet(attrs)

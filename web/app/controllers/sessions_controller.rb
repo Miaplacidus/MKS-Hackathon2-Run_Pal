@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
   def create
-    user = RunPal::User.from_omniauth(env["omniauth.auth"])
+    user = RunPal.db.from_omniauth(env["omniauth.auth"])
     session[:user_id] = user.id
     redirect_to root_url
   end

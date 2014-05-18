@@ -3,6 +3,7 @@ require 'active_record'
 require 'active_record_tasks'
 require 'pry-debugger'
 require 'yaml'
+require 'time'
 
 module RunPal
   def self.db
