@@ -1,11 +1,10 @@
 module RunPal
   class Post < Entity
     attr_accessor :id, :creator_id, :time, :pace, :notes, :complete, :min_amt, :min_distance
-    attr_accessor :age_pref, :gender_pref, :committer_ids, :attend_ids, :circle_id, :max_runners
-    attr_accessor :latitude, :longitude
-    # committer_ids: array
-    # when created, committer ids will first include the creator's id
-    # attend_ids: array
+    attr_accessor :age_pref, :gender_pref, :circle_id, :max_runners
+    attr_accessor :latitude, :longitude, :challenge_id
+
+    # when created, creator's post commitment will automatically be generated
     #location: [lat: number, long: number]
     # NOTE IN DB TABLES: location, committer ids, attend ids
     validates_presence_of :creator_id, :time, :pace, :min_amt, :latitude, :longitude
