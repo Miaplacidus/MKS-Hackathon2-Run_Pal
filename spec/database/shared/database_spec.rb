@@ -11,7 +11,7 @@ shared_examples 'a database' do
 
     before :each do
       users = [
-        {username: "Fast Feet", gender: 1, email:"marathons@speed.com", password:"abc123", bday:"2/8/1987"},
+        {username: "Fast Feet", gender: 1, email:"marathons@speed.com", password:"abc123", bday:"2/8/1987", level: 0},
         {username: "Runna Lot", gender: 2, email:"jogger@run.com", password:"111222", bday:"6/6/1966"},
         {username: "Jon Jones", gender: 2, email:"runlikemad@sprinter.com", password:"aabbcc", bday:"3/14/1988"},
         {username: "Nee Upp", gender: 1, email:"sofast@runna.com", password: "123abc", bday: "5/15/1994"}
@@ -28,6 +28,7 @@ shared_examples 'a database' do
       expect(user.username).to eq("Fast Feet")
       expect(user.gender).to eq(1)
       expect(user.password).to eq("abc123")
+      expect(user.level).to eq(0)
       expect(user.email).to eq("marathons@speed.com")
       expect(user.bday).to eq("2/8/1987")
     end
@@ -83,10 +84,10 @@ shared_examples 'a database' do
       @t_july_first = Time.parse("July 1 2014")
 
       posts = [
-        {creator_id: @user_objs[0].id, time: @t_apr_first, location:[40, 51], pace: 2, notes:"Sunny day run!", complete:false, min_amt:10.50, age_pref: 0, gender_pref: 0, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil},
-        {creator_id: @user_objs[1].id, time: @t_may_first, location:[44, 55], pace: 1, notes:"Let's go.", complete:false, min_amt:5.50, age_pref: 3, gender_pref: 1, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil},
-        {creator_id: @user_objs[2].id, time: @t_june_first, location:[66, 77], pace: 7, notes:"Will be a fairly relaxed jog.", complete:true, min_amt:12.00, age_pref: 3, gender_pref: 1, committer_ids: [@user_objs[0].id, @user_objs[1].id], attend_ids: [@user_objs[0].id, @user_objs[1].id], circle_id: nil},
-        {creator_id: @user_objs[3].id, time: @t_july_first, location:[88, 99], pace: 0, complete:false, min_amt:20.00, age_pref: 4, gender_pref: 0, committer_ids: [@user_objs[0].id, @user_objs[1].id, @user_objs[2].id, @user_objs[3].id], attend_ids: [@user_objs[1].id, @user_objs[3].id], circle_id: @circle.id},
+        {creator_id: @user_objs[0].id, time: @t_apr_first, latitude: 40, longitude: 51, pace: 2, notes:"Sunny day run!", complete:false, min_amt:10.50, age_pref: 0, gender_pref: 0, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil},
+        {creator_id: @user_objs[1].id, time: @t_may_first, latitude: 44, longitude: 55, pace: 1, notes:"Let's go.", complete:false, min_amt:5.50, age_pref: 3, gender_pref: 1, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil},
+        {creator_id: @user_objs[2].id, time: @t_june_first, latitude: 66, longitude: 77, pace: 7, notes:"Will be a fairly relaxed jog.", complete:true, min_amt:12.00, age_pref: 3, gender_pref: 1, committer_ids: [@user_objs[0].id, @user_objs[1].id], attend_ids: [@user_objs[0].id, @user_objs[1].id], circle_id: nil},
+        {creator_id: @user_objs[3].id, time: @t_july_first, latitude: 88, longitude: 99, pace: 0, complete:false, min_amt:20.00, age_pref: 4, gender_pref: 0, committer_ids: [@user_objs[0].id, @user_objs[1].id, @user_objs[2].id, @user_objs[3].id], attend_ids: [@user_objs[1].id, @user_objs[3].id], circle_id: @circle.id},
       ]
 
       @post_objs = []
@@ -177,7 +178,7 @@ shared_examples 'a database' do
     end
 
     it "filters posts by location and search radius" do
-      result = db.posts_filter_location([44,55], 10)
+      result = db.posts_filter_location(44,55, 10)
       result.count.should eql(1)
       expect(result.map &:notes).to include("Let's go.")
     end
@@ -209,8 +210,8 @@ shared_examples 'a database' do
       end
 
       posts = [
-        {creator_id: @user_objs[0].id, time: Time.now, location:[22, 33], pace: 2, notes:"Sunny day run!", complete:false, min_amt:10.50, age_pref: 0, gender_pref: 0, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil},
-        {creator_id: @user_objs[1].id, time: Time.now, location:[44, 55], pace: 1, notes:"Let's go.", complete:false, min_amt:5.50, age_pref: 3, gender_pref: 1, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil}
+        {creator_id: @user_objs[0].id, time: Time.now, latitude: 22, longitude: 33, pace: 2, notes:"Sunny day run!", complete:false, min_amt:10.50, age_pref: 0, gender_pref: 0, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil},
+        {creator_id: @user_objs[1].id, time: Time.now, latitude: 44, longitude: 55, pace: 1, notes:"Let's go.", complete:false, min_amt:5.50, age_pref: 3, gender_pref: 1, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil}
       ]
 
       @post_objs = []
@@ -263,14 +264,14 @@ shared_examples 'a database' do
         @user_objs << db.create_user(info)
     end
 
-    @circle1 = db.create_circle({name: "Silvercar", admin_id: @user_objs[1].id, max_members: 14, location:[32, 44], member_ids:[]})
-    @circle2 = db.create_circle({name: "Crazy Apps", admin_id: @user_objs[2].id, max_members: 19, location: [22, 67], member_ids:[]})
+    @circle1 = db.create_circle({name: "Silvercar", admin_id: @user_objs[1].id, max_members: 14, latitude: 32, longitude: 44, member_ids:[@user_objs[0].id, @user_objs[3].id]})
+    @circle2 = db.create_circle({name: "Crazy Apps", admin_id: @user_objs[2].id, max_members: 19, latitude: 22, longitude: 67, member_ids:[]})
 
     posts = [
-      {creator_id: @user_objs[0].id, time: Time.now, location:[22, 33], pace: 2, notes:"Sunny day run!", complete:false, min_amt:10.50, age_pref: 0, gender_pref: 0, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil},
-      {creator_id: @user_objs[1].id, time: Time.now, location:[44, 55], pace: 1, notes:"Let's go.", complete:false, min_amt:5.50, age_pref: 3, gender_pref: 1, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil},
-      {creator_id: @user_objs[2].id, time: Time.now, location:[66, 77], pace: 7, notes:"Will be a fairly relaxed jog.", complete:true, min_amt:12.00, age_pref: 3, gender_pref: 1, committer_ids: [@user_objs[0].id, @user_objs[1].id], attend_ids: [@user_objs[0].id, @user_objs[1].id], circle_id: nil},
-      {creator_id: @user_objs[3].id, time: Time.now, location:[88, 99], pace: 0, complete:false, min_amt:20.00, age_pref: 4, gender_pref: 0, committer_ids: [@user_objs[0].id, @user_objs[1].id, @user_objs[2].id, @user_objs[3].id], attend_ids: [@user_objs[1].id, @user_objs[3].id], circle_id: @circle1.id},
+      {creator_id: @user_objs[0].id, time: Time.now, latitude: 22, longitude: 33, pace: 2, notes:"Sunny day run!", complete:false, min_amt:10.50, age_pref: 0, gender_pref: 0, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil},
+      {creator_id: @user_objs[1].id, time: Time.now, latitude: 44, longitude: 55, pace: 1, notes:"Let's go.", complete:false, min_amt:5.50, age_pref: 3, gender_pref: 1, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: nil},
+      {creator_id: @user_objs[2].id, time: Time.now, latitude: 66, longitude: 77, pace: 7, notes:"Will be a fairly relaxed jog.", complete:true, min_amt:12.00, age_pref: 3, gender_pref: 1, committer_ids: [@user_objs[0].id, @user_objs[1].id], attend_ids: [@user_objs[0].id, @user_objs[1].id], circle_id: nil},
+      {creator_id: @user_objs[3].id, time: Time.now, latitude: 88, longitude: 99, pace: 0, complete:false, min_amt:20.00, age_pref: 4, gender_pref: 0, committer_ids: [@user_objs[0].id, @user_objs[1].id, @user_objs[2].id, @user_objs[3].id], attend_ids: [@user_objs[1].id, @user_objs[3].id], circle_id: @circle1.id},
     ]
 
     @post_objs = []
@@ -284,6 +285,7 @@ shared_examples 'a database' do
       expect(@circle1.name).to eq("Silvercar")
       expect(@circle1.max_members).to eq(14)
       expect(db.get_user(@circle1.admin_id).username).to eq("Runna Lot")
+      expect(@circle1.member_ids.length).to eq(2)
     end
 
     it "gets a circle" do
@@ -305,7 +307,7 @@ shared_examples 'a database' do
     end
 
     it "filters circles by location and search radius" do
-      result = db.circles_filter_location([32,44], 10)
+      result = db.circles_filter_location(32, 44, 10)
       result.count.should eql(1)
       expect(result.map &:name).to include("Silvercar")
     end
@@ -317,7 +319,7 @@ shared_examples 'a database' do
     end
 
     it "filters out full circles" do
-      full_circle = db.create_circle({name: "ATX Runners", admin_id: @user_objs[1].id, max_members: 3, location:[32, 44], member_ids:[@user_objs[0], @user_objs[1], @user_objs[2]]})
+      full_circle = db.create_circle({name: "ATX Runners", admin_id: @user_objs[1].id, max_members: 3, latitude: 32, longitude: 44, member_ids:[@user_objs[0], @user_objs[1], @user_objs[2]]})
       result = db.circles_filter_full
       expect(result.count).to eq(2)
     end
@@ -368,7 +370,7 @@ shared_examples 'a database' do
 
     @circle1 = db.create_circle({name: "MakerSquare", admin_id: @user_objs[0].id, max_members: 30})
     @circle2 = db.create_circle({name: "Hack Reactor", admin_id: @user_objs[1].id, max_members: 25})
-    @challenge = db.create_challenge({name: "Monday Funday", sender_id: @circle1.id, recipient_id: @circle2.id, creator_id: @circle1.admin_id, time: Time.now, location:[22, 33], pace: 1, notes:"Doom!", complete:false, min_amt:0, age_pref: 0, gender_pref: 0, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: @circle1.id})
+    @challenge = db.create_challenge({name: "Monday Funday", sender_id: @circle1.id, recipient_id: @circle2.id, creator_id: @circle1.admin_id, time: Time.now, latitude:22, longitude: 33, pace: 1, notes:"Doom!", complete:false, min_amt:0, age_pref: 0, gender_pref: 0, committer_ids: [@user_objs[0].id], attend_ids: [], circle_id: @circle1.id})
     end
 
     it "creates a challenge with accepted set to default of false" do
@@ -383,9 +385,9 @@ shared_examples 'a database' do
 
     it "updates a challenge" do
     # add time tests
-      updated = db.update_challenge(@challenge.id, {name:"Go HAM", location:[33, 44]})
+      updated = db.update_challenge(@challenge.id, {name:"Go HAM", latitude: 33, longitude: 44})
       expect(updated.name).to eq("Go HAM")
-      expect(db.get_post(updated.post_id).location).to include(33, 44)
+      expect(db.get_post(updated.post_id).latitude).to eq(33)
     end
 
     it "deletes a challenge" do

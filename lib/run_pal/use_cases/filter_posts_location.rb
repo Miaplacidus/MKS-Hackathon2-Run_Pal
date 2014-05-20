@@ -8,7 +8,7 @@ module RunPal
     end
 
     def filter_posts_by_location(attrs)
-      RunPal.db.posts_filter_location(attrs[:location], attrs[:radius])
+      RunPal.db.posts_filter_location(attrs[:latitude], attrs[:longitude], attrs[:radius])
     end
 
   end

@@ -115,14 +115,30 @@ module RunPal
         circle_arr
       end
 
-      def circles_filter_location(user_loc, radius)
+      # def circles_filter_location(user_loc, radius)
+      #   mi_to_km = 1.60934
+      #   earth_radius = 6371
+      #   circle_arr = []
+      #   radius = radius * mi_to_km
+      #   @circles.each do |cid, attrs|
+      #     loc_arr = attrs[:location]
+      #     distance = Math.acos(Math.sin(user_loc[0]) * Math.sin(loc_arr[0]) + Math.cos(user_loc[0]) * Math.cos(loc_arr[0]) * Math.cos(loc_arr[1] - user_loc[1])) * earth_radius
+      #     if distance <= radius
+      #       circle_arr << RunPal::Circle.new(attrs)
+      #     end
+      #   end
+      #   circle_arr
+      # end
+
+      def circles_filter_location(user_lat, user_long, radius)
         mi_to_km = 1.60934
         earth_radius = 6371
         circle_arr = []
         radius = radius * mi_to_km
         @circles.each do |cid, attrs|
-          loc_arr = attrs[:location]
-          distance = Math.acos(Math.sin(user_loc[0]) * Math.sin(loc_arr[0]) + Math.cos(user_loc[0]) * Math.cos(loc_arr[0]) * Math.cos(loc_arr[1] - user_loc[1])) * earth_radius
+          post_lat = attrs[:latitude]
+          post_long = attrs[:longitude]
+          distance = Math.acos(Math.sin(user_lat) * Math.sin(post_lat) + Math.cos(user_lat) * Math.cos(post_lat) * Math.cos(post_long - user_long)) * earth_radius
           if distance <= radius
             circle_arr << RunPal::Circle.new(attrs)
           end
@@ -252,14 +268,15 @@ module RunPal
         post_arr
       end
 
-      def posts_filter_location(user_loc, radius)
+      def posts_filter_location(user_lat, user_long, radius)
         mi_to_km = 1.60934
         earth_radius = 6371
         post_arr = []
         radius = radius * mi_to_km
         @posts.each do |pid, post_attrs|
-          loc_arr = post_attrs[:location]
-          distance = Math.acos(Math.sin(user_loc[0]) * Math.sin(loc_arr[0]) + Math.cos(user_loc[0]) * Math.cos(loc_arr[0]) * Math.cos(loc_arr[1] - user_loc[1])) * earth_radius
+          post_lat = post_attrs[:latitude]
+          post_long = post_attrs[:longitude]
+          distance = Math.acos(Math.sin(user_lat) * Math.sin(post_lat) + Math.cos(user_lat) * Math.cos(post_lat) * Math.cos(post_long - user_long)) * earth_radius
           if distance <= radius
             post_arr << RunPal::Post.new(post_attrs)
           end
