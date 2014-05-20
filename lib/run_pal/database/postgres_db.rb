@@ -111,14 +111,22 @@ module RunPal
         RunPal::Challenge.new(ar_challenge.attributes)
       end
 
-      def get_circle_challenges(circle_id)
+      # def get_circle_challenges(circle_id)
+      #   ar_circle = Circle.where(id: circle_id).first
+      #   received_chal = ar_circle.received_challenges
+      #   sent_chal = ar_circle.sent_challenges
+      #   puts "LOOK HERE #{sent_chal[0].name}"
+      # end
+
+      def get_circle_sent_challenges(circle_id)
         ar_circle = Circle.where(id: circle_id).first
-        received_chal = ar_circle.received_challenges
         sent_chal = ar_circle.sent_challenges
-        puts "LOOK HERE #{sent_chal[0].name}"
       end
 
-      def get_
+      def get_circle_rec_challenges(circle_id)
+        ar_circle = Circle.where(id: circle_id).first
+        received_chal = ar_circle.received_challenges
+      end
 
       # get sent challenges
       # get received challenges
