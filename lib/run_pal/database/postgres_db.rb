@@ -154,9 +154,7 @@ module RunPal
       end
 
       def all_circles
-        ar_circles = Circle.all
-
-        ar_circles.map do |ar_circle|
+        Circle.all.map do |ar_circle|
           RunPal::Circle.new(ar_circle.attributes)
         end
       end
@@ -231,6 +229,18 @@ module RunPal
         ar_user = User.where(id: id).first
         return nil if ar_user == nil
         RunPal::User.new(ar_user.attributes)
+      end
+
+      def all_users
+        User.all.map do |ar_user|
+          RunPal::User.new(ar_user.attributes)
+        end
+      end
+
+      def update_user(user_id, attrs)
+        User.where(id: user_id).first.update_attributes(attrs)
+        updated_user = User.find(user_id)
+        RunPal::User.new(updated_user.attributes)
       end
 
       def delete_user(id)
