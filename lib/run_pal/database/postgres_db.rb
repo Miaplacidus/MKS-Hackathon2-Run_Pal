@@ -118,7 +118,7 @@ module RunPal
         puts "LOOK HERE #{sent_chal[0].name}"
       end
 
-      def get_
+
 
       # get sent challenges
       # get received challenges
