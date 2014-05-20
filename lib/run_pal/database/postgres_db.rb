@@ -354,6 +354,18 @@ module RunPal
         post_arr
       end
 
+      def posts_filter_time(start_time, end_time)
+        post_arr = []
+        ar_posts = Post.all
+
+        ar_posts.each do |ar_post|
+          if ar_post.time > start_time && ar_post.time < end_time
+            post_arr << RunPal::Post.new(ar_post.attributes)
+          end
+        end
+        post_arr
+      end
+
       def create_user(attrs)
         ar_user = User.create(attrs)
         RunPal::User.new(ar_user.attributes)
