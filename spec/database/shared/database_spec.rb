@@ -95,6 +95,8 @@ shared_examples 'a database' do
         @post_objs << db.create_post(info)
       end
 
+      @commit1 = db.create_commit({user_id: @user_objs[0].id, post_id: @post_objs[0].id, amount: 20.30})
+      @commit2 = db.create_commit({user_id: @user_objs[1].id, post_id: @post_objs[0].id, amount: 15.00, fulfilled: true})
     end
 
     it "creates a post" do
@@ -129,18 +131,19 @@ shared_examples 'a database' do
       expect(result.min_amt).to eq(12.00)
     end
 
-    xit "gets all people committed to a run" do
-      post = @post_objs[2]
+    it "gets all people committed to a run" do
+      post = @post_objs[0]
       committers = db.get_committed_users(post.id)
       expect(committers.count).to eq(2)
-      expect(db.get_user(committers[1]).username).to eq("Runna Lot")
+      committer_arr = [db.get_user(committers[0]), db.get_user(committers[1])]
+      expect(committer_arr.map &:username).to include("Runna Lot", "Fast Feet")
     end
 
-    xit "gets all people who attended a run" do
-      post = @post_objs[3]
+    it "gets all people who attended a run" do
+      post = @post_objs[0]
       attendees = db.get_attendees(post.id)
-      expect(attendees.count).to eq(2)
-      expect(db.get_user(attendees[1]).username).to eq("Nee Upp")
+      expect(attendees.count).to eq(1)
+      expect(db.get_user(attendees[0]).username).to eq("Runna Lot")
     end
 
     it "gets all posts" do

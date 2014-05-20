@@ -191,6 +191,29 @@ module RunPal
           RunPal::Post.new(ar_post.attributes)
         end
       end
+
+      def get_committed_users(post_id)
+        ar_post = Post.where(id: post_id).first
+        ar_commits = ar_post.commitments
+
+        commit_arr = ar_commits.map do |ar_commit|
+          RunPal::Commitment.new(ar_commit.attributes)
+        end
+
+        commit_arr.map &:user_id
+      end
+
+      def get_attendees(post_id)
+        ar_post = Post.where(id: post_id).first
+        ar_commits = ar_post.commitments.where(fulfilled: true)
+
+        commit_arr = ar_commits.map do |ar_commit|
+          RunPal::Commitment.new(ar_commit.attributes)
+        end
+
+        commit_arr.map &:user_id
+      end
+
       def create_user(attrs)
         ar_user = User.create(attrs)
         RunPal::User.new(ar_user.attributes)
