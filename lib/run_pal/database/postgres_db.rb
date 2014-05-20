@@ -172,9 +172,17 @@ module RunPal
       end
 
       def get_circle_posts(circle_id)
-        ar_circle = Circle.where
+        ar_circle = Circle.where(id: circle_id).first
+        ar_circle.posts
       end
 
+      def all_posts
+        ar_posts = Post.all
+
+        ar_posts.map do |ar_post|
+          RunPal::Post.new(ar_post.attributes)
+        end
+      end
       def create_user(attrs)
         ar_user = User.create(attrs)
         RunPal::User.new(ar_user.attributes)
