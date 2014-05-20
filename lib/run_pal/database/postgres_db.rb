@@ -122,6 +122,31 @@ module RunPal
         received_chal = ar_circle.received_challenges.order(:created_at)
       end
 
+      def update_challenge(id, attrs)
+        post_attrs = attrs.clone
+
+        post_attrs.delete_if do |name, value|
+          setter = "#{name}"
+          !RunPal::Post.method_defined?(setter)
+        end
+
+        ar_challenge = Challenge.where(id: id).first
+
+        post_id = ar_challenge.post_id
+        ar_post = Post.where(id: post_id).first
+        ar_post.update_attributes(post_attrs)
+
+        attrs.delete_if do |name, value|
+          setter = "#{name}"
+          !RunPal::Challenge.method_defined?(setter)
+        end
+
+        ar_challenge.update_attributes(attrs)
+
+        updated_chal = Challenge.where(id: id).first
+        RunPal::Challenge.new(updated_chal.attributes)
+      end
+
       def delete_challenge(id)
         Challenge.where(id: id).first.delete
       end
@@ -218,6 +243,10 @@ module RunPal
         end
 
         commit_arr.map &:user_id
+      end
+
+      def delete_post(id)
+        Post.where(id: id).first.delete
       end
 
       def create_user(attrs)
