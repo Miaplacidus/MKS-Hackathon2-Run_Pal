@@ -111,18 +111,15 @@ module RunPal
         RunPal::Challenge.new(ar_challenge.attributes)
       end
 
-      def get_circle_challenges(circle_id)
+      def get_circle_sent_challenges(circle_id)
         ar_circle = Circle.where(id: circle_id).first
-        received_chal = ar_circle.received_challenges
-        sent_chal = ar_circle.sent_challenges
-        puts "LOOK HERE #{sent_chal[0].name}"
+        sent_chal = ar_circle.sent_challenges.order(:created_at)
       end
 
-
-
-      # get sent challenges
-      # get received challenges
-      # both sorted by date and limited to first 50
+      def get_circle_rec_challenges(circle_id)
+        ar_circle = Circle.where(id: circle_id).first
+        received_chal = ar_circle.received_challenges.order(:created_at)
+      end
 
       def create_circle(attrs)
         members = attrs[:member_ids]
@@ -172,6 +169,10 @@ module RunPal
       def get_post(id)
         ar_post = Post.where(id: id).first
         RunPal::Post.new(ar_post.attributes)
+      end
+
+      def get_circle_posts(circle_id)
+        ar_circle = Circle.where
       end
 
       def create_user(attrs)
