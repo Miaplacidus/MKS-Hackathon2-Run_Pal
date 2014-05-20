@@ -132,9 +132,9 @@ module RunPal
         circle_arr = []
         radius = radius * mi_to_km
         @circles.each do |cid, attrs|
-          post_lat = attrs[:latitude]
-          post_long = attrs[:longitude]
-          distance = Math.acos(Math.sin(user_lat) * Math.sin(post_lat) + Math.cos(user_lat) * Math.cos(post_lat) * Math.cos(post_long - user_long)) * earth_radius
+          circle_lat = attrs[:latitude]
+          circle_long = attrs[:longitude]
+          distance = Math.acos(Math.sin(user_lat) * Math.sin(circle_lat) + Math.cos(user_lat) * Math.cos(circle_lat) * Math.cos(circle_long - user_long)) * earth_radius
           if distance <= radius
             circle_arr << RunPal::Circle.new(attrs)
           end

@@ -108,6 +108,7 @@ module RunPal
 
       def get_challenge(id)
         ar_challenge = Challenge.where(id: id).first
+        return nil if ar_challenge == nil
         RunPal::Challenge.new(ar_challenge.attributes)
       end
 
@@ -119,6 +120,35 @@ module RunPal
       def get_circle_rec_challenges(circle_id)
         ar_circle = Circle.where(id: circle_id).first
         received_chal = ar_circle.received_challenges.order(:created_at)
+      end
+
+      def update_challenge(id, attrs)
+        post_attrs = attrs.clone
+
+        post_attrs.delete_if do |name, value|
+          setter = "#{name}"
+          !RunPal::Post.method_defined?(setter)
+        end
+
+        ar_challenge = Challenge.where(id: id).first
+
+        post_id = ar_challenge.post_id
+        ar_post = Post.where(id: post_id).first
+        ar_post.update_attributes(post_attrs)
+
+        attrs.delete_if do |name, value|
+          setter = "#{name}"
+          !RunPal::Challenge.method_defined?(setter)
+        end
+
+        ar_challenge.update_attributes(attrs)
+
+        updated_chal = Challenge.where(id: id).first
+        RunPal::Challenge.new(updated_chal.attributes)
+      end
+
+      def delete_challenge(id)
+        Challenge.where(id: id).first.delete
       end
 
       def create_circle(attrs)
@@ -140,6 +170,7 @@ module RunPal
 
       def get_circle(id)
         ar_circle = Circle.where(id: id).first
+        return nil if ar_circle == nil
         RunPal::Circle.new(ar_circle.attributes)
       end
 
@@ -148,11 +179,47 @@ module RunPal
       end
 
       def all_circles
-        ar_circles = Circle.all
-
-        ar_circles.map do |ar_circle|
+        Circle.all.map do |ar_circle|
           RunPal::Circle.new(ar_circle.attributes)
         end
+      end
+
+      def circles_filter_location(user_lat, user_long, radius)
+        mi_to_km = 1.60934
+        earth_radius = 6371
+        ar_circles = Circle.all
+        circle_arr = []
+
+        ar_circles.each do |ar_circle|
+          circle_lat = ar_circle.latitude
+          circle_long = ar_circle.longitude
+          distance = Math.acos(Math.sin(user_lat) * Math.sin(circle_lat) + Math.cos(user_lat) * Math.cos(circle_lat) * Math.cos(circle_long - user_long)) * earth_radius
+
+          if distance <= radius
+            circle_arr << RunPal::Circle.new(ar_circle.attributes)
+          end
+        end
+        circle_arr
+      end
+
+      def circles_filter_full
+        ar_circles = Circle.all
+        circle_arr = []
+
+        ar_circles.each do |ar_circle|
+          num_members = CircleUsers.where(circle_id: ar_circle.id).length
+
+          if num_members < ar_circle.max_members
+            circle_arr << RunPal::Circle.new(ar_circle.attributes)
+          end
+        end
+        circle_arr
+      end
+
+      def update_circle(id, attrs)
+        Circle.where(id: id).first.update_attributes(attrs)
+        updated_circle = Circle.where(id: id).first
+        RunPal::Circle.new(updated_circle.attributes)
       end
 
       def create_commit(attrs)
@@ -162,6 +229,7 @@ module RunPal
 
       def get_commit(id)
         ar_commit = Commitment.where(id: id).first
+        return nil if ar_commit == nil
         RunPal::Commitment.new(ar_commit.attributes)
       end
 
@@ -176,6 +244,7 @@ module RunPal
 
       def get_post(id)
         ar_post = Post.where(id: id).first
+        return nil if ar_post == nil
         RunPal::Post.new(ar_post.attributes)
       end
 
@@ -191,6 +260,63 @@ module RunPal
           RunPal::Post.new(ar_post.attributes)
         end
       end
+
+      def get_committed_users(post_id)
+        ar_post = Post.where(id: post_id).first
+        ar_commits = ar_post.commitments
+
+        commit_arr = ar_commits.map do |ar_commit|
+          RunPal::Commitment.new(ar_commit.attributes)
+        end
+
+        commit_arr.map &:user_id
+      end
+
+      def get_attendees(post_id)
+        ar_post = Post.where(id: post_id).first
+        ar_commits = ar_post.commitments.where(fulfilled: true)
+
+        commit_arr = ar_commits.map do |ar_commit|
+          RunPal::Commitment.new(ar_commit.attributes)
+        end
+
+        commit_arr.map &:user_id
+      end
+
+      def delete_post(id)
+        Post.where(id: id).first.delete
+      end
+
+      def posts_filter_age(age)
+        ar_posts = Post.where(age_pref: age)
+        post_arr = []
+
+        ar_posts.each do |ar_post|
+          post_arr << RunPal::Post.new(ar_post.attributes)
+        end
+        post_arr
+      end
+
+      def posts_filter_gender(gender)
+        ar_posts = Post.where(gender_pref: gender)
+        post_arr = []
+
+        ar_posts.each do |ar_post|
+          post_arr << RunPal::Post.new(ar_post.attributes)
+        end
+        post_arr
+      end
+
+      def posts_filter_pace(pace)
+        ar_posts = Post.where(pace: pace)
+        post_arr = []
+
+        ar_posts.each do |ar_post|
+          post_arr << RunPal::Post.new(ar_post.attributes)
+        end
+        post_arr
+      end
+
       def create_user(attrs)
         ar_user = User.create(attrs)
         RunPal::User.new(ar_user.attributes)
@@ -198,7 +324,24 @@ module RunPal
 
       def get_user(id)
         ar_user = User.where(id: id).first
+        return nil if ar_user == nil
         RunPal::User.new(ar_user.attributes)
+      end
+
+      def all_users
+        User.all.map do |ar_user|
+          RunPal::User.new(ar_user.attributes)
+        end
+      end
+
+      def update_user(user_id, attrs)
+        User.where(id: user_id).first.update_attributes(attrs)
+        updated_user = User.where(user_id).first
+        RunPal::User.new(updated_user.attributes)
+      end
+
+      def delete_user(id)
+        User.where(id: id).first.delete
       end
 
       def create_wallet(attrs)
@@ -208,7 +351,23 @@ module RunPal
 
       def get_wallet_by_userid(user_id)
         ar_wallet = Wallet.where(user_id: user_id).first
+        return nil if ar_wallet == nil
         RunPal::Wallet.new(ar_wallet.attributes)
+      end
+
+      def update_wallet_balance(user_id, transaction)
+        ar_wallet = Wallet.where(user_id: user_id).first
+        ar_balance = ar_wallet.balance
+        updated_bal = ar_balance + transaction
+
+        ar_wallet.update_attributes({balance: updated_bal})
+        updated_wallet = Wallet.where(user_id: user_id).first
+
+        RunPal::Wallet.new(updated_wallet.attributes)
+      end
+
+      def delete_wallet(user_id)
+        ar_wallet = Wallet.where(user_id: user_id).first.delete
       end
 
 
