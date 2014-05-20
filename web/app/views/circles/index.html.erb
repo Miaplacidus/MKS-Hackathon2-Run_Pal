@@ -5,110 +5,29 @@
 
     <!-- LEFT-CONTAINER -->
     <div class="left-container container">
-        <div class="profile block">
-          <a class="add-button" href="#28"><span class="icon entypo-plus scnd-font-color"></span></a>
-          <div class="profile-picture big-profile-picture clear">
-             <img width="150px" alt="Ifu picture" src="https://coursereport_prod.s3.amazonaws.com/rich/rich_files/rich_files/41/s300/maker-20square-logo.jpg?1384974903" >
-          </div>
-          <h1 class="user-name">GROUP NAME</h1>
-          <div class="profile-description">
-              <p class="scnd-font-color">Group Description</p>
-          </div>
-          <ul class="profile-options horizontal-list">
-              <li><a class="comments" href="#40"><p><span class="scnd-font-color"></span>Members</p></a></li>
-              <li><a class="views" href="#41"><p><span class="scnd-font-color"></span>Runs</p></a></li>
-              <li><a class="likes" href="#42"><p><span class="scnd-font-color"></span>Pace</p></a></li>
-          </ul>
-        </div>
+        <%= render "shared/menu_box" %>
 
-        <div class="line-chart-block block clear"> <!-- LINE CHART BLOCK (LEFT-CONTAINER) -->
-            <div class="profile block"> <!-- PROFILE (LEFT-CONTAINER) -->
-              <a class="add-button" href="#28"><span class="icon entypo-plus scnd-font-color"></span></a>
-              <div class="profile-picture big-profile-picture clear">
-                  <img width="150px" alt="Ifu picture" src="https://coursereport_prod.s3.amazonaws.com/rich/rich_files/rich_files/41/s300/maker-20square-logo.jpg?1384974903" >
-              </div>
-              <h1 class="user-name">GROUP NAME</h1>
-              <div class="profile-description">
-                  <p class="scnd-font-color">Group Description</p>
-              </div>
-              <ul class="profile-options horizontal-list">
-                  <li><a class="comments" href="#40"><p><span class="scnd-font-color"></span>Members</p></a></li>
-                  <li><a class="views" href="#41"><p><span class="scnd-font-color"></span>Runs</p></a></li>
-                  <li><a class="likes" href="#42"><p><span class="scnd-font-color"></span>Pace</p></a></li>
-              </ul>
-            </div>
-        </div>
-
-  </div>
+    </div> <!-- end left-container -->
 
     <!-- MIDDLE-CONTAINER -->
+    <div class="middle-container">
+        <div class="circle-title">
+            <h2 class="titular"><span class="icon entypo-location"></span><strong>Running Circles</strong></h2>
+        </div>
+    </div>
+
     <div class="middle-container container">
-        <div class="profile block"> <!-- PROFILE (MIDDLE-CONTAINER) -->
-            <a class="add-button" href="#28"><span class="icon entypo-plus scnd-font-color"></span></a>
-            <div class="profile-picture big-profile-picture clear">
-                <img width="150px" alt="Ifu picture" src="https://coursereport_prod.s3.amazonaws.com/rich/rich_files/rich_files/41/s300/maker-20square-logo.jpg?1384974903" >
-            </div>
-            <h1 class="user-name">GROUP NAME</h1>
-            <div class="profile-description">
-                <p class="scnd-font-color">Group Description</p>
-            </div>
-            <ul class="profile-options horizontal-list">
-                <li><a class="comments" href="#40"><p><span class="scnd-font-color"></span>Members</p></a></li>
-                <li><a class="views" href="#41"><p><span class="scnd-font-color"></span>Runs</p></a></li>
-                <li><a class="likes" href="#42"><p><span class="scnd-font-color"></span>Pace</p></a></li>
-            </ul>
-        </div>
-        <div class="profile block"> <!-- PROFILE (MIDDLE-CONTAINER) -->
-            <a class="add-button" href="#28"><span class="icon entypo-plus scnd-font-color"></span></a>
-            <div class="profile-picture big-profile-picture clear">
-                <img width="150px" alt="Ifu picture" src="https://coursereport_prod.s3.amazonaws.com/rich/rich_files/rich_files/41/s300/maker-20square-logo.jpg?1384974903" >
-            </div>
-            <h1 class="user-name">GROUP NAME</h1>
-            <div class="profile-description">
-                <p class="scnd-font-color">Group Description</p>
-            </div>
-            <ul class="profile-options horizontal-list">
-                <li><a class="comments" href="#40"><p><span class="scnd-font-color"></span>Members</p></a></li>
-                <li><a class="views" href="#41"><p><span class="scnd-font-color"></span>Runs</p></a></li>
-                <li><a class="likes" href="#42"><p><span class="scnd-font-color"></span>Pace</p></a></li>
-            </ul>
-        </div>
+        <%= render "shared/group_module" %>
+        <%= render "shared/group_module" %>
+
 
     </div>
 
     <!-- RIGHT-CONTAINER -->
     <div class="right-container container">
-      <div class="profile block">
-          <a class="add-button" href="#28"><span class="icon entypo-plus scnd-font-color"></span></a>
-          <div class="profile-picture big-profile-picture clear">
-             <img width="150px" alt="Ifu picture" src="https://coursereport_prod.s3.amazonaws.com/rich/rich_files/rich_files/41/s300/maker-20square-logo.jpg?1384974903" >
-          </div>
-          <h1 class="user-name">GROUP NAME</h1>
-          <div class="profile-description">
-              <p class="scnd-font-color">Group Description</p>
-          </div>
-          <ul class="profile-options horizontal-list">
-              <li><a class="comments" href="#40"><p><span class="scnd-font-color"></span>Members</p></a></li>
-              <li><a class="views" href="#41"><p><span class="scnd-font-color"></span>Runs</p></a></li>
-              <li><a class="likes" href="#42"><p><span class="scnd-font-color"></span>Pace</p></a></li>
-          </ul>
-        </div>
+      <%= render "shared/group_module" %>
+      <%= render "shared/group_module" %>
 
-        <div class="profile block">
-          <a class="add-button" href="#28"><span class="icon entypo-plus scnd-font-color"></span></a>
-          <div class="profile-picture big-profile-picture clear">
-             <img width="150px" alt="Ifu picture" src="https://coursereport_prod.s3.amazonaws.com/rich/rich_files/rich_files/41/s300/maker-20square-logo.jpg?1384974903" >
-          </div>
-          <h1 class="user-name">GROUP NAME</h1>
-          <div class="profile-description">
-              <p class="scnd-font-color">Group Description</p>
-          </div>
-          <ul class="profile-options horizontal-list">
-              <li><a class="comments" href="#40"><p><span class="scnd-font-color"></span>Members</p></a></li>
-              <li><a class="views" href="#41"><p><span class="scnd-font-color"></span>Runs</p></a></li>
-              <li><a class="likes" href="#42"><p><span class="scnd-font-color"></span>Pace</p></a></li>
-          </ul>
-        </div>
 
     </div> <!-- end right-container -->
 </div> <!-- end main-container -->

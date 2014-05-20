@@ -91,6 +91,60 @@ h1, h2, p, a, span{
 .input-container {
   position: relative;
 }
+
+label {
+  color: white;
+  padding-left: 20px;
+}
+
+  input[type=date]{
+    width: 260px;
+    height: 50px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    padding-left: 45px;
+    background: #50597b;
+    color: #fff;
+    border: solid 1px #1f253d;
+    border-radius: 5px;
+  }
+
+  input[type=time]{
+    width: 260px;
+    height: 50px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    padding-left: 45px;
+    background: #50597b;
+    color: #fff;
+    border: solid 1px #1f253d;
+    border-radius: 5px;
+  }
+
+  select{
+    width: 260px;
+    height: 50px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    padding-left: 45px;
+    background: #50597b;
+    color: #fff;
+    border: solid 1px #1f253d;
+    border-radius: 5px;
+  }
+
+  input[type=number]{
+    width: 260px;
+    height: 50px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    padding-left: 45px;
+    background: #50597b;
+    color: #fff;
+    border: solid 1px #1f253d;
+    border-radius: 5px;
+  }
+
   input[type=text]{
     width: 260px;
     height: 50px;
@@ -721,8 +775,17 @@ h1, h2, p, a, span{
     .middle-container {
       margin: 0 25px;
     }
+
+      .group-profile{
+        height:388px;
+      }
+
+      .post-profile{
+        height:410px;
+      }
+
       .profile {
-        height: 410px;
+        height: 100%;
       }
         .add-button .icon {
           float: right;
@@ -762,7 +825,7 @@ h1, h2, p, a, span{
             }
             .profile-options a {
               display: block;
-              width: 99px;
+              width: 98px;
               line-height: 60px;
               text-align: center;
               -webkit-transition: background .3s;
@@ -793,6 +856,32 @@ h1, h2, p, a, span{
               .profile-options .likes {
                 border-top: 4px solid #e64c65;
               }
+
+      .post-run-module{
+        height:750px;
+      }
+      .post-run-module .titular {
+          background: #cc324b;
+        }
+          .post-run-module .titular .icon {
+            padding-right: 15px;
+            font-size: 26px;
+          }
+
+      .circle-title {
+        float: left;
+        width: 625px;
+        padding-left: 25px;
+      }
+
+      .circle-title .titular {
+          background: #cc324b;
+        }
+          .circle-title .titular .icon {
+            padding-right: 15px;
+            font-size: 26px;
+          }
+
       .weather {
         height: 555px;
       }
@@ -1084,3 +1173,21 @@ h1, h2, p, a, span{
             background: #e64c65;
             border-radius: 100%;
           }
+/*NEW STUFF*/
+form {
+    width: 80%;
+    margin: 0 auto;
+}
+
+label, input {
+    /* in order to define widths */
+    display: inline-block;
+}
+
+label {
+    width: 30%;
+    /* positions the label text beside the input */
+    text-align: right;
+}
+
+

@@ -1,0 +1,86 @@
+<div class="main-container">
+
+    <!-- HEADER MENU -->
+    <%= render "shared/menu" %>
+
+    <!-- LEFT-CONTAINER -->
+    <div class="left-container container">
+        <%= render "shared/menu_box" %>
+
+        <ul class="social horizontal-list block"> <!-- SOCIAL (LEFT-CONTAINER) -->
+            <li class="facebook"><p class="icon"><span class="zocial-facebook"></span></p><p class="number">248k</p></li>
+            <li class="twitter"><p class="icon"><span class="zocial-twitter"></span></p><p class="number">30k</p></li>
+            <li class="googleplus"><p class="icon"><span class="zocial-googleplus"></span></p><p class="number">124k</p></li>
+            <li class="mailbox"><p class="icon"><span class="fontawesome-envelope"></span></p><p class="number">89k</p></li>
+        </ul>
+    </div>
+
+    <!-- RIGHT-CONTAINERS -->
+    <div class="middle-container post-container">
+      <div class="post-run-module block clear">
+
+        <h2 class="titular"><span class="icon entypo-location"></span><strong>Post a Run</strong></h2>
+        <br>
+        <form action="#" method="#">
+            <div class="input-container">
+                <label class="post-run">Date</label>
+                <input type="date" name="date" placeholder="Date" class="email text-input">
+            </div>
+            <div class="input-container">
+              <label class="post-run">Time</label>
+                <input type="time" name="time" placeholder="Time" class="email text-input">
+            </div>
+            <div class="input-container">
+              <label class="post-run">Location</label>
+                <input type="text" name="location" placeholder="Location" class="email text-input">
+            </div>
+            <div class="input-container">
+              <label class="post-run">Pace</label>
+              <select name="pace">
+                <option value="military">Military (> 6 min/mile)</option>
+                <option value="military">Advanced (6-7 min/mile)</option>
+                <option value="military">High Intermediate (7-8 min/mile)</option>
+                <option value="military">Intermediate (8-9 min/mile)</option>
+                <option value="military">High Beginner (9-10 min/mile)</option>
+                <option value="military">Beginner (10-11 min/mile)</option>
+              </select>
+            </div>
+            <div class="input-container">
+              <label class="post-run">Distance</label>
+                <input type="number" name="distance" placeholder="Estimate Distance" class="email text-input">
+            </div>
+            <div class="input-container">
+              <label class="post-run">Age Preference</label>
+              <select name="age_pref">
+                <option value="16-17">16-17</option>
+                <option value="18-22">18-22</option>
+                <option value="23-29">23-29</option>
+                <option value="30-39">30-39</option>
+                <option value="40-49">40-49</option>
+                <option value="50-59">50-59</option>
+                <option value="60-69">60-69</option>
+                <option value="70+">70+</option>
+              </select>
+            </div>
+            <div class="input-container">
+              <label class="post-run">Gender Pref</label>
+              <select name="gender_pref">
+                <option value="FEMALE">Female</option>
+                <option value="MALE">Male</option>
+                <option value="BOTH">No RunningBuddy Gender Preference</option>
+              </select>
+            </div>
+            <div class="input-container">
+              <label class="post-run">Max Runners</label>
+                <input type="text" name="max_runners" placeholder="Max Runners" class="password text-input">
+            </div>
+        </form>
+
+        <a class="sign-in button" href="#22">POST RUN</a>
+
+
+      </div><!-- end of post-run-module -->
+
+    </div>
+
+</div> <!-- end main-container -->
