@@ -396,9 +396,9 @@ shared_examples 'a database' do
     end
 
     it "gets a challenge by sender or recipient ids" do
-      result = db.get_circle_challenges(@circle1.id)
+      result = db.get_circle_sent_challenges(@circle1.id)
       expect(result[0].name).to eq("Monday Funday")
-      result = db.get_circle_challenges(@circle2.id)
+      result = db.get_circle_rec_challenges(@circle2.id)
       expect(result[0].name).to eq("Monday Funday")
     end
   end
