@@ -346,9 +346,9 @@ shared_examples 'a database' do
     end
 
     it "updates a wallet" do
-      updated = db.update_wallet(@user.id, {balance: 30.00})
+      updated = db.update_wallet_balance(@user.id, 30.00)
       expect(db.get_user(updated.user_id).username).to eq("Usain Bolt")
-      expect(updated.balance).to eq(30.00)
+      expect(updated.balance).to eq(50.00)
     end
 
     it "deletes a wallet" do

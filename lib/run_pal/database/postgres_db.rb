@@ -258,6 +258,17 @@ module RunPal
         RunPal::Wallet.new(ar_wallet.attributes)
       end
 
+      def update_wallet_balance(user_id, transaction)
+        ar_wallet = Wallet.where(user_id: user_id).first
+        ar_balance = ar_wallet.balance
+        updated_bal = ar_balance + transaction
+
+        ar_wallet.update_attributes({balance: updated_bal})
+        updated_wallet = Wallet.where(user_id: user_id).first
+
+        RunPal::Wallet.new(updated_wallet.attributes)
+      end
+
       def delete_wallet(user_id)
         ar_wallet = Wallet.where(user_id: user_id).first.delete
       end
