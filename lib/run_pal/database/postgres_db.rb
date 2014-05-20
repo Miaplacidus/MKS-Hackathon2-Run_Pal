@@ -175,7 +175,14 @@ module RunPal
       end
 
       def get_circle_names
+        ar_circles = Circle.all
+        name_hash = {}
 
+        ar_circles.each do |ar_circle|
+          name_hash[ar_circle.name] = true
+        end
+
+        name_hash
       end
 
       def all_circles
