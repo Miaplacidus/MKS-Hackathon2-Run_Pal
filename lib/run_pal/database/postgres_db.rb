@@ -184,6 +184,24 @@ module RunPal
         end
       end
 
+      def circles_filter_location(user_lat, user_long, radius)
+        mi_to_km = 1.60934
+        earth_radius = 6371
+        ar_circles = Circle.all
+        circle_arr = []
+
+        ar_circles.each do |ar_circle|
+          circle_lat = ar_circle.latitude
+          circle_long = ar_circle.longitude
+          distance = Math.acos(Math.sin(user_lat) * Math.sin(circle_lat) + Math.cos(user_lat) * Math.cos(circle_lat) * Math.cos(circle_long - user_long)) * earth_radius
+
+          if distance <= radius
+            circle_arr << RunPal::Circle.new(ar_circle.attributes)
+          end
+        end
+        circle_arr
+      end
+
       def create_commit(attrs)
         ar_commit = Commitment.create(attrs)
         RunPal::Commitment.new(ar_commit.attributes)
