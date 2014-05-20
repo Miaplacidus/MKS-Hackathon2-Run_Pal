@@ -289,6 +289,12 @@ module RunPal
         commit_arr.map &:user_id
       end
 
+      def update_post(id, attrs)
+        Post.where(id: id).first.update_attributes(attrs)
+        updated_post = Post.where(id: id).first
+        RunPal::Post.new(updated_post.attributes)
+      end
+
       def delete_post(id)
         Post.where(id: id).first.delete
       end
@@ -309,6 +315,24 @@ module RunPal
 
         ar_posts.each do |ar_post|
           post_arr << RunPal::Post.new(ar_post.attributes)
+        end
+        post_arr
+      end
+
+      def posts_filter_location(user_lat, user_long, radius)
+        mi_to_km = 1.60934
+        earth_radius = 6371
+        ar_posts = Post.all
+        post_arr = []
+
+        ar_posts.each do |ar_post|
+          post_lat = ar_post.latitude
+          post_long = ar_post.longitude
+          distance = Math.acos(Math.sin(user_lat) * Math.sin(post_lat) + Math.cos(user_lat) * Math.cos(post_lat) * Math.cos(post_long - user_long)) * earth_radius
+
+          if distance <= radius
+            post_arr << RunPal::Post.new(ar_post.attributes)
+          end
         end
         post_arr
       end
@@ -342,7 +366,7 @@ module RunPal
 
       def update_user(user_id, attrs)
         User.where(id: user_id).first.update_attributes(attrs)
-        updated_user = User.where(user_id).first
+        updated_user = User.where(id: user_id).first
         RunPal::User.new(updated_user.attributes)
       end
 

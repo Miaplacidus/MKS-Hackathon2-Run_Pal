@@ -155,11 +155,9 @@ shared_examples 'a database' do
     it "updates posts" do
       # UPDATE TIME AS WELL
       post = @post_objs[1]
-      result = db.update_post(post.id, {age_pref: 4, pace: 3, attend_ids: [@user_objs[0].id, @user_objs[1].id]})
+      result = db.update_post(post.id, {age_pref: 4, pace: 3})
       expect(result.age_pref).to eq(4)
       expect(result.pace).to eq(3)
-      expect(result.attend_ids.count).to eq(2)
-      expect(db.get_user(result.attend_ids[0]).username).to eq("Fast Feet")
     end
 
     it "deletes posts" do
