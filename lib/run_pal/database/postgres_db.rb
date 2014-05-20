@@ -237,6 +237,12 @@ module RunPal
         ar_commits = Commitment.where(user_id: user_id)
       end
 
+      def update_commit(id, attrs)
+        Commitment.where(id: id).first.update_attributes(attrs)
+        updated_commit = Commitment.where(id: id).first
+        RunPal::Commitment.new(updated_commit.attributes)
+      end
+
       def create_post(attrs)
         ar_post = Post.create(attrs)
         RunPal::Post.new(ar_post.attributes)
