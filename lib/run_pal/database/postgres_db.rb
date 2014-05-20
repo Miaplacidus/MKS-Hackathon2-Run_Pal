@@ -147,6 +147,14 @@ module RunPal
 
       end
 
+      def all_circles
+        ar_circles = Circle.all
+
+        ar_circles.map do |ar_circle|
+          RunPal::Circle.new(ar_circle.attributes)
+        end
+      end
+
       def create_commit(attrs)
         ar_commit = Commitment.create(attrs)
         RunPal::Commitment.new(ar_commit.attributes)
