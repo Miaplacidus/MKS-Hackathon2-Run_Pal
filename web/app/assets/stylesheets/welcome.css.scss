@@ -1,5 +1,3 @@
-@import url(http://fonts.googleapis.com/css?family=Ubuntu:400,700);
-@import url(http://weloveiconfonts.com/api/?family=entypo|fontawesome|zocial);
 /* entypo */
 [class*="entypo-"]:before {
   font-family: 'entypo', sans-serif;
@@ -207,6 +205,13 @@ h1, h2, p, a, span{
       .arrow-btn.left .icon {
         padding-right: 2px;
       }
+
+.map-display {
+  margin: 0 auto;
+  border: 5px solid #50597b;
+  width: 550px;
+  height: 250px;
+}
 
 .profile-picture {
   border-radius: 100%;
