@@ -108,6 +108,7 @@ module RunPal
 
       def get_challenge(id)
         ar_challenge = Challenge.where(id: id).first
+        return nil if ar_challenge == nil
         RunPal::Challenge.new(ar_challenge.attributes)
       end
 
@@ -119,6 +120,10 @@ module RunPal
       def get_circle_rec_challenges(circle_id)
         ar_circle = Circle.where(id: circle_id).first
         received_chal = ar_circle.received_challenges.order(:created_at)
+      end
+
+      def delete_challenge(id)
+        Challenge.where(id: id).first.delete
       end
 
       def create_circle(attrs)
@@ -140,6 +145,7 @@ module RunPal
 
       def get_circle(id)
         ar_circle = Circle.where(id: id).first
+        return nil if ar_circle == nil
         RunPal::Circle.new(ar_circle.attributes)
       end
 
@@ -162,6 +168,7 @@ module RunPal
 
       def get_commit(id)
         ar_commit = Commitment.where(id: id).first
+        return nil if ar_commit == nil
         RunPal::Commitment.new(ar_commit.attributes)
       end
 
@@ -176,6 +183,7 @@ module RunPal
 
       def get_post(id)
         ar_post = Post.where(id: id).first
+        return nil if ar_post == nil
         RunPal::Post.new(ar_post.attributes)
       end
 
@@ -221,7 +229,12 @@ module RunPal
 
       def get_user(id)
         ar_user = User.where(id: id).first
+        return nil if ar_user == nil
         RunPal::User.new(ar_user.attributes)
+      end
+
+      def delete_user(id)
+        User.where(id: id).first.delete
       end
 
       def create_wallet(attrs)
@@ -231,7 +244,12 @@ module RunPal
 
       def get_wallet_by_userid(user_id)
         ar_wallet = Wallet.where(user_id: user_id).first
+        return nil if ar_wallet == nil
         RunPal::Wallet.new(ar_wallet.attributes)
+      end
+
+      def delete_wallet(user_id)
+        ar_wallet = Wallet.where(user_id: user_id).first.delete
       end
 
 
