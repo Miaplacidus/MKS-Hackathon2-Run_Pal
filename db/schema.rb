@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140519191305) do
+ActiveRecord::Schema.define(version: 20140520145533) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,8 +23,10 @@ ActiveRecord::Schema.define(version: 20140519191305) do
     t.boolean  "accepted"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "post_id"
   end
 
+  add_index "challenges", ["post_id"], name: "index_challenges_on_post_id", using: :btree
   add_index "challenges", ["recipient_id"], name: "index_challenges_on_recipient_id", using: :btree
   add_index "challenges", ["sender_id"], name: "index_challenges_on_sender_id", using: :btree
 
@@ -37,17 +39,21 @@ ActiveRecord::Schema.define(version: 20140519191305) do
 
   create_table "circles", force: true do |t|
     t.string   "name"
-    t.integer  "user_id"
     t.integer  "max_members"
     t.float    "latitude"
     t.float    "longitude"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "admin_id"
+    t.text     "description"
+    t.integer  "level"
   end
+
+  add_index "circles", ["admin_id"], name: "index_circles_on_admin_id", using: :btree
 
   create_table "commitments", force: true do |t|
     t.float   "amount"
-    t.boolean "fulfilled"
+    t.boolean "fulfilled", default: false
     t.integer "post_id"
     t.integer "user_id"
   end
@@ -66,7 +72,6 @@ ActiveRecord::Schema.define(version: 20140519191305) do
   create_table "posts", force: true do |t|
     t.integer  "challenge_id"
     t.integer  "circle_id"
-    t.integer  "user_id"
     t.datetime "time"
     t.float    "latitude"
     t.float    "longitude"
@@ -79,11 +84,12 @@ ActiveRecord::Schema.define(version: 20140519191305) do
     t.integer  "max_runners"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "creator_id"
   end
 
   add_index "posts", ["challenge_id"], name: "index_posts_on_challenge_id", using: :btree
   add_index "posts", ["circle_id"], name: "index_posts_on_circle_id", using: :btree
-  add_index "posts", ["user_id"], name: "index_posts_on_user_id", using: :btree
+  add_index "posts", ["creator_id"], name: "index_posts_on_creator_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "username"
@@ -97,10 +103,13 @@ ActiveRecord::Schema.define(version: 20140519191305) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "img"
+    t.string   "password"
+    t.integer  "level"
   end
 
   create_table "wallets", force: true do |t|
     t.integer "user_id"
+    t.float   "balance"
   end
 
   add_index "wallets", ["user_id"], name: "index_wallets_on_user_id", using: :btree

@@ -50,15 +50,26 @@ module RunPal
         challenge = @challenges[id] ? RunPal::Challenge.new(@challenges[id]) : nil
       end
 
-      def get_circle_challenges(circle_id)
-        challenge_arr = []
+      def get_circle_rec_challenges(circle_id)
+       challenge_arr = []
         @challenges.each do |cid, attrs|
-          if attrs[:sender_id] == circle_id || attrs[:recipient_id] == circle_id
+          if attrs[:recipient_id] == circle_id
             challenge_arr << RunPal::Challenge.new(attrs)
           end
         end
         challenge_arr
       end
+
+      def get_circle_sent_challenges(circle_id)
+       challenge_arr = []
+        @challenges.each do |cid, attrs|
+          if attrs[:sender_id] == circle_id
+            challenge_arr << RunPal::Challenge.new(attrs)
+          end
+        end
+        challenge_arr
+      end
+
 
       def update_challenge(id, attrs)
           if @challenges[id]
@@ -114,21 +125,6 @@ module RunPal
         end
         circle_arr
       end
-
-      # def circles_filter_location(user_loc, radius)
-      #   mi_to_km = 1.60934
-      #   earth_radius = 6371
-      #   circle_arr = []
-      #   radius = radius * mi_to_km
-      #   @circles.each do |cid, attrs|
-      #     loc_arr = attrs[:location]
-      #     distance = Math.acos(Math.sin(user_loc[0]) * Math.sin(loc_arr[0]) + Math.cos(user_loc[0]) * Math.cos(loc_arr[0]) * Math.cos(loc_arr[1] - user_loc[1])) * earth_radius
-      #     if distance <= radius
-      #       circle_arr << RunPal::Circle.new(attrs)
-      #     end
-      #   end
-      #   circle_arr
-      # end
 
       def circles_filter_location(user_lat, user_long, radius)
         mi_to_km = 1.60934
