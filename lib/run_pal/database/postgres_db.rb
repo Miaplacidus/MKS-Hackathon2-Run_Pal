@@ -202,6 +202,26 @@ module RunPal
         circle_arr
       end
 
+      def circles_filter_full
+        ar_circles = Circle.all
+        circle_arr = []
+
+        ar_circles.each do |ar_circle|
+          num_members = CircleUsers.where(circle_id: ar_circle.id).length
+
+          if num_members < ar_circle.max_members
+            circle_arr << RunPal::Circle.new(ar_circle.attributes)
+          end
+        end
+        circle_arr
+      end
+
+      def update_circle(id, attrs)
+        Circle.where(id: id).first.update_attributes(attrs)
+        updated_circle = Circle.where(id: id).first
+        RunPal::Circle.new(updated_circle.attributes)
+      end
+
       def create_commit(attrs)
         ar_commit = Commitment.create(attrs)
         RunPal::Commitment.new(ar_commit.attributes)
@@ -267,6 +287,36 @@ module RunPal
         Post.where(id: id).first.delete
       end
 
+      def posts_filter_age(age)
+        ar_posts = Post.where(age_pref: age)
+        post_arr = []
+
+        ar_posts.each do |ar_post|
+          post_arr << RunPal::Post.new(ar_post.attributes)
+        end
+        post_arr
+      end
+
+      def posts_filter_gender(gender)
+        ar_posts = Post.where(gender_pref: gender)
+        post_arr = []
+
+        ar_posts.each do |ar_post|
+          post_arr << RunPal::Post.new(ar_post.attributes)
+        end
+        post_arr
+      end
+
+      def posts_filter_pace(pace)
+        ar_posts = Post.where(pace: pace)
+        post_arr = []
+
+        ar_posts.each do |ar_post|
+          post_arr << RunPal::Post.new(ar_post.attributes)
+        end
+        post_arr
+      end
+
       def create_user(attrs)
         ar_user = User.create(attrs)
         RunPal::User.new(ar_user.attributes)
@@ -286,7 +336,7 @@ module RunPal
 
       def update_user(user_id, attrs)
         User.where(id: user_id).first.update_attributes(attrs)
-        updated_user = User.find(user_id)
+        updated_user = User.where(user_id).first
         RunPal::User.new(updated_user.attributes)
       end
 
