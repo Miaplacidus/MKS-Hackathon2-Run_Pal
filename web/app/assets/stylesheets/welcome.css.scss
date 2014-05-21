@@ -380,7 +380,7 @@ label {
       background: #394264;
       border-radius: 5px;
     }
-    /******************************************** LEFT CONTAINER *****************************************/
+
     .left-container .titular {
       background: #cc324b;
     }
@@ -444,9 +444,7 @@ label {
         .donut-chart {
           height: 270px;
         }
-        /******************************************
-        DONUT-CHART by @kseso http://codepen.io/Kseso/pen/phiyL
-        ******************************************/
+
           .donut-chart {
             position: relative;
             width: 200px;
@@ -523,9 +521,7 @@ label {
               -webkit-transform: rotate(32deg);
               transform: rotate(32deg);
             }
-        /******************************************
-        END DONUT-CHART by @kseso http://codepen.io/Kseso/pen/phiyL
-        ******************************************/
+
         .os-percentages {
           padding-top: 36px;
         }
@@ -564,9 +560,7 @@ label {
           height: 200px;
           background: #11a8ab;
         }
-        /******************************************
-        LINE-CHART by @kseso http://codepen.io/Kseso/pen/phiyL
-        ******************************************/
+
         .grafico {
           padding: 2rem 1rem 1rem;
           width: 100%;
@@ -647,9 +641,7 @@ label {
           float: left;
           text-align: center;
         }
-        /******************************************
-        END LINE-CHART by @kseso http://codepen.io/Kseso/pen/phiyL
-        ******************************************/
+
         .time-lenght {
           padding-top: 22px;
           padding-left: 38px;
@@ -782,6 +774,63 @@ label {
               border-bottom-right-radius: 5px;
             }
     /************************************************** MIDDLE CONTAINER **********************************/
+
+    /*SIGN IN*/
+    .sign-in-home {
+      margin-bottom: 25px;
+      background: #394264;
+      border-radius: 5px;
+      width: 350px;
+      margin: 0 auto;
+    }
+
+    .sign-in-home .titular {
+      padding: 5px 0;
+    }
+
+    .signin {
+        height: 340px;
+      }
+        .signin .titular {
+          padding: 10px 0;
+        }
+          .sign-in.button:hover {
+            background: #cc324b;
+          }
+        .signin p {
+          text-align: center;
+          margin-bottom: 20px
+        }
+        .fb-sign-in {
+          margin-top: 28px;
+          display: block;
+          line-height: 50px;
+          background: #3468af;
+          border-bottom-left-radius: 5px;
+          border-bottom-right-radius: 5px;
+          -webkit-transition: background .3s;
+          transition: background .3s;
+        }
+          .fb-sign-in:hover {
+            background: #1a4e95;
+            text-decoration: none;
+          }
+        .fb-sign-in .icon {
+          line-height: 20px;
+          font-size: 12px;
+          padding-right: 3px;
+        }
+          .fb-border {
+            display: inline-block;
+            width: 23px;
+            line-height: 20px;
+            border: 2px solid #fff;
+            border-radius: 100%;
+            margin-right: 10px;
+          }
+
+    /*END SIGN IN*/
+
     .middle-container {
       margin: 0 25px;
     }
