@@ -121,6 +121,18 @@ label {
     border-radius: 5px;
   }
 
+  input[type=email]{
+    width: 260px;
+    height: 50px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    padding-left: 45px;
+    background: #50597b;
+    color: #fff;
+    border: solid 1px #1f253d;
+    border-radius: 5px;
+  }
+
   select{
     width: 260px;
     height: 50px;
@@ -197,15 +209,6 @@ label {
 
 .icon {
   font-size: 25px;
-}
-
-.titular {
-  display: block;
-  line-height: 60px;
-  margin: 0;
-  text-align: center;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
 }
 
 .button {
@@ -378,7 +381,13 @@ label {
       border-radius: 5px;
     }
     /******************************************** LEFT CONTAINER *****************************************/
-    .left-container {}
+    .left-container .titular {
+      background: #cc324b;
+    }
+    .left-container .icon {
+      padding-right: 15px;
+      font-size: 26px;
+    }
       .menu-box {
         height: 360px;
       }
@@ -722,6 +731,7 @@ label {
             }
       .left-container .social {
         height: 110px;
+        margin-top: 25px;
       }
         .left-container .social li {
           width: 75px;
