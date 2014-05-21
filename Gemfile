@@ -1,4 +1,7 @@
 source 'https://rubygems.org'
+# ruby '2.0.0'
+
+# for testing purposes
 ruby '2.1.1'
 
 # Core Application
@@ -16,3 +19,4 @@ gem 'geocoder'
 gem 'gmaps4rails'
 gem 'omniauth'
 gem 'omniauth-facebook', '1.4.0'
+

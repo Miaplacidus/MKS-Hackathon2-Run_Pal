@@ -1,7 +1,7 @@
 module RunPal
   module Database
-
     class InMemory
+
       def initialize(config=nil)
         clear_everything
       end

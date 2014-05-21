@@ -5,7 +5,7 @@ describe RunPal::JoinCircle do
   before :all do
     RunPal.db.clear_everything
     user1 = RunPal.db.create_user({username:"Isaac Asimov", gender: 2, email: "write@smarty.com"})
-    @circle = RunPal.db.create_circle({name: "MakerSquare", admin_id: user1.id, max_members: 2, member_ids: [user1.id]})
+    @circle = RunPal.db.create_circle({name: "MakerSquare", admin_id: user1.id, max_members: 2, latitude: 33, longitude: 44, description:"Hell yeah!", level: 2})
   end
 
   it 'allows users to join circles' do

@@ -373,7 +373,13 @@ module RunPal
 
       def get_user(id)
         ar_user = User.where(id: id).first
-        return nil if ar_user == nil
+        return nil if !ar_user
+        RunPal::User.new(ar_user.attributes)
+      end
+
+      def get_user_by_email(email)
+        ar_user = User.where(email: email).first
+        return nil if !ar_user
         RunPal::User.new(ar_user.attributes)
       end
 

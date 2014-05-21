@@ -40,6 +40,13 @@ shared_examples 'a database' do
       expect(retrieved_user.bday).to eq('6/6/1966')
     end
 
+    it "gets a user by email" do
+      retrieved_user = db.get_user_by_email("jogger@run.com")
+      expect(retrieved_user.username).to eq("Runna Lot")
+      retrieved_user = db.get_user_by_email("email@fake.com")
+      expect(retrieved_user).to eq(nil)
+    end
+
     it "gets all users" do
       # %w{Alice Bob}.each {|name| db.create_user :username => name }
       expect(db.all_users.count).to eq(4)
