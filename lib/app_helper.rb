@@ -7,7 +7,7 @@ require 'time'
 
 module RunPal
   def self.db
-    @db_class ||= Database::InMemory
+    @db_class ||= Database::PostgresDB
     @__db_instance ||= @db_class.new
   end
 

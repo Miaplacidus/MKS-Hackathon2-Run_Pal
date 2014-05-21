@@ -8,7 +8,7 @@ module RunPal
     #location: [lat: number, long: number]
     # NOTE IN DB TABLES: location, committer ids, attend ids
     validates_presence_of :creator_id, :time, :pace, :min_amt, :latitude, :longitude
-    validates_presence_of :age_pref, :gender_pref, :committer_ids, :max_runners
+    validates_presence_of :age_pref, :gender_pref, :max_runners
 
     def initialize(attrs={})
       @notes = ""
