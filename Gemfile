@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.1.1'
+ruby '2.0.0'
 
 # Core Application
 gem 'activemodel', '~> 4.1'
@@ -16,3 +16,4 @@ gem 'geocoder'
 gem 'gmaps4rails'
 gem 'omniauth'
 gem 'omniauth-facebook', '1.4.0'
+
