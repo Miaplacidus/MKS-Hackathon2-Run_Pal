@@ -4,8 +4,12 @@ class PostsController < ApplicationController
   end
 
   def new
+
+  end
+
+  def create
     params = request.request_parameters
-    RunPal::CreatePost(params)
+    RunPal::CreatePost.create_new_post(params)
   end
 
 end
