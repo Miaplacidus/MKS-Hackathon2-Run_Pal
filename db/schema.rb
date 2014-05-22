@@ -100,8 +100,8 @@ ActiveRecord::Schema.define(version: 20140522110856) do
     t.datetime "oauth_expires_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "img"
     t.string   "password"
+    t.string   "img"
     t.integer  "level"
   end
 
