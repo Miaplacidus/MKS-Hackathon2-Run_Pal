@@ -16,7 +16,7 @@ module RunPal
     end
 
     def join_circle(attrs)
-      RunPal.db.update_circle(attrs[:circle_id], {member_ids: [attrs[:user_id]]})
+      RunPal.db.add_user_to_circle(attrs[:circle_id], attrs[:user_id])
     end
 
   end

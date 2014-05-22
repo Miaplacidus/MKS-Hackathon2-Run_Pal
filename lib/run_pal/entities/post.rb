@@ -2,7 +2,7 @@ module RunPal
   class Post < Entity
     attr_accessor :id, :creator_id, :time, :pace, :notes, :complete, :min_amt, :min_distance
     attr_accessor :age_pref, :gender_pref, :circle_id, :max_runners
-    attr_accessor :latitude, :longitude, :challenge_id
+    attr_accessor :latitude, :longitude
 
     # when created, creator's post commitment will automatically be generated
     #location: [lat: number, long: number]
@@ -23,6 +23,7 @@ end
 
 =begin
 PACE LEVELS
+-1 - All/Any levels
 0 - Military: 6 min and under/mile
 1 - Advanced: 6-7 min/mi
 2 - High Intermediate: 7-8 min/mi

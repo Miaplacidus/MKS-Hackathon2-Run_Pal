@@ -5,7 +5,7 @@ describe RunPal::UpdateCircle do
   before :all do
     RunPal.db.clear_everything
     user1 = RunPal.db.create_user({username:"Isaac Asimov", gender: 2, email: "write@smarty.com"})
-    @circle = RunPal.db.create_circle({name: "MakerSquare", admin_id: user1.id, max_members: 2, member_ids: [user1.id]})
+    @circle = RunPal.db.create_circle({name: "MakerSquare", admin_id: user1.id, max_members: 3})
   end
 
   it 'updates a circle' do

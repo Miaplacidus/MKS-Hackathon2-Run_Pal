@@ -83,7 +83,7 @@ shared_examples 'a database' do
           @user_objs << db.create_user(info)
       end
 
-      @circle = db.create_circle({name: "MakerSquare", admin_id: @user_objs[0].id, max_members: 30, member_ids: []})
+      @circle = db.create_circle({name: "MakerSquare", admin_id: @user_objs[0].id, max_members: 30})
 
       @t_apr_first = Time.parse("Apr 1 2014")
       @t_may_first = Time.parse("May 1 2014")
@@ -272,8 +272,8 @@ shared_examples 'a database' do
         @user_objs << db.create_user(info)
     end
 
-    @circle1 = db.create_circle({name: "Silvercar", admin_id: @user_objs[1].id, max_members: 14, latitude: 32, longitude: 44, member_ids:[@user_objs[0].id, @user_objs[3].id]})
-    @circle2 = db.create_circle({name: "Crazy Apps", admin_id: @user_objs[2].id, max_members: 19, latitude: 22, longitude: 67, member_ids:[]})
+    @circle1 = db.create_circle({name: "Silvercar", admin_id: @user_objs[1].id, max_members: 14, latitude: 32, longitude: 44})
+    @circle2 = db.create_circle({name: "Crazy Apps", admin_id: @user_objs[2].id, max_members: 19, latitude: 22, longitude: 67})
 
     posts = [
       {creator_id: @user_objs[0].id, time: Time.now, latitude: 22, longitude: 33, pace: 2, notes:"Sunny day run!", complete:false, min_amt:10.50, age_pref: 0, gender_pref: 0, circle_id: nil},
@@ -293,7 +293,6 @@ shared_examples 'a database' do
       expect(@circle1.name).to eq("Silvercar")
       expect(@circle1.max_members).to eq(14)
       expect(db.get_user(@circle1.admin_id).username).to eq("Runna Lot")
-      expect(@circle1.member_ids.length).to eq(2)
     end
 
     it "gets a circle" do
@@ -326,8 +325,16 @@ shared_examples 'a database' do
       expect(updated.max_members).to eq(35)
     end
 
+    it "adds a user to a circle" do
+      new_user = db.add_user_to_circle(@circle1.id, @user_objs[0].id)
+      expect(new_user.username).to eq("Fast Feet")
+    end
+
     it "filters out full circles" do
-      full_circle = db.create_circle({name: "ATX Runners", admin_id: @user_objs[1].id, max_members: 3, latitude: 32, longitude: 44, member_ids:[@user_objs[0], @user_objs[1], @user_objs[2]]})
+      full_circle = db.create_circle({name: "ATX Runners", admin_id: @user_objs[1].id, max_members: 3, latitude: 32, longitude: 44})
+      db.add_user_to_circle(full_circle.id, @user_objs[0].id)
+      db.add_user_to_circle(full_circle.id, @user_objs[1].id)
+      db.add_user_to_circle(full_circle.id, @user_objs[2].id)
       result = db.circles_filter_full
       expect(result.count).to eq(2)
     end
@@ -376,8 +383,8 @@ shared_examples 'a database' do
       @user_objs << db.create_user(info)
     end
 
-    @circle1 = db.create_circle({name: "MakerSquare", admin_id: @user_objs[0].id, max_members: 30, member_ids: []})
-    @circle2 = db.create_circle({name: "Hack Reactor", admin_id: @user_objs[1].id, max_members: 25, member_ids: []})
+    @circle1 = db.create_circle({name: "MakerSquare", admin_id: @user_objs[0].id, max_members: 30})
+    @circle2 = db.create_circle({name: "Hack Reactor", admin_id: @user_objs[1].id, max_members: 25})
     @challenge = db.create_challenge({name: "Monday Funday", sender_id: @circle1.id, recipient_id: @circle2.id, creator_id: @circle1.admin_id, time: Time.now, latitude:22, longitude: 33, pace: 1, notes:"Doom!", complete:false, min_amt:0, age_pref: 0, gender_pref: 0, circle_id: @circle1.id})
     end
 

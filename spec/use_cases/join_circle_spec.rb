@@ -13,7 +13,7 @@ describe RunPal::JoinCircle do
     result = subject.run({circle_id: @circle.id, user_id: user2.id})
 
     expect(result.success?).to eq(true)
-    expect(result.circle.member_ids.length).to eq(2)
+    expect(result.username).to eq("Runna Lot")
   end
 
   it "disallows joining if maximum membership reached" do

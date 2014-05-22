@@ -31,7 +31,7 @@ module RunPal
       end
 
       class Challenge < ActiveRecord::Base
-        has_one :post
+        belongs_to :post
 
         # Differentiate between sender and recipient
         belongs_to :sender, class_name: "Circle", foreign_key: "sender_id"
@@ -71,7 +71,7 @@ module RunPal
       class Post < ActiveRecord::Base
         has_many :commitments
 
-        belongs_to :challenge
+        has_one :challenge
         # differentiate between creator and committers
         belongs_to :creator, class_name:"User", foreign_key:"creator_id"
 
@@ -152,18 +152,19 @@ module RunPal
       end
 
       def create_circle(attrs)
-        members = attrs[:member_ids]
-        attrs.delete(:member_ids)
+        # Member IDS are passed in an array
+
+        # members = attrs[:member_ids]
+        # attrs.delete(:member_ids)
+
+        # members.each do |uid|
+        #   CircleUsers.create(circle_id: ar_circle.id, user_id: uid )
+        # end
+
         ar_circle = Circle.create(attrs)
 
-        members.each do |uid|
-          CircleUsers.create(circle_id: ar_circle.id, user_id: uid )
-        end
-
-        ar_members = CircleUsers.where(circle_id: ar_circle.id)
-
         attrs_w_members = ar_circle.attributes
-        attrs_w_members[:member_ids] = ar_members
+        attrs_w_members[:member_ids] = []
 
         RunPal::Circle.new(attrs_w_members)
       end
@@ -171,7 +172,17 @@ module RunPal
       def get_circle(id)
         ar_circle = Circle.where(id: id).first
         return nil if ar_circle == nil
-        RunPal::Circle.new(ar_circle.attributes)
+
+        ar_members = CircleUsers.where(circle_id: ar_circle.id)
+        members = []
+
+        ar_members.each do |ar_member|
+          members << ar_member.id
+        end
+
+        attrs_w_members = ar_circle.attributes
+        attrs_w_members[:member_ids] = members
+        RunPal::Circle.new(attrs_w_members)
       end
 
       def get_circle_names
@@ -220,13 +231,32 @@ module RunPal
             circle_arr << RunPal::Circle.new(ar_circle.attributes)
           end
         end
+
         circle_arr
+      end
+
+      def circles_filter_full_by_location (user_lat, user_long, radius)
+       nearby_circles = circles_filter_location(user_lat, user_long, radius)
+
+       nearby_circles.each do |circle|
+        num_members = circle.max_member
+
+
+       end
+
       end
 
       def update_circle(id, attrs)
         Circle.where(id: id).first.update_attributes(attrs)
         updated_circle = Circle.where(id: id).first
         RunPal::Circle.new(updated_circle.attributes)
+      end
+
+      def add_user_to_circle(id, user_id)
+        ar_circle_user = CircleUsers.create({circle_id: id, user_id: user_id})
+        circle_user = CircleUsers.where("circle_id = ? AND user_id = ?", id, user_id).first
+        ar_user = User.where(id: circle_user.user_id).first
+        RunPal::User.new(ar_user.attributes)
       end
 
       def create_commit(attrs)
