@@ -1,0 +1,70 @@
+<div class="main-container">
+
+    <!-- HEADER MENU -->
+    <%= render "shared/menu" %>
+
+    <!-- LEFT-CONTAINER -->
+    <div class="left-container container">
+        <%= render "shared/menu_box" %>
+
+    </div>
+
+    <!-- RIGHT-CONTAINERS -->
+    <div class="middle-container post-container">
+      <div class="post-run-module block clear">
+
+        <h2 class="titular"><span class="icon entypo-location"></span><strong>Post a Run</strong></h2>
+        <br>
+        <form action="#" method="#">
+            <div class="input-container">
+              <label class="post-run">Username</label>
+                <input type="text" name="location" placeholder="username" class="email text-input">
+            </div>
+            <div class="input-container">
+              <label class="post-run">Gender</label>
+              <select name="gender">
+                <option value="military">Female</option>
+                <option value="military">Male</option>
+                <option value="military">Decline</option>
+              </select>
+            </div>
+            <div class="input-container">
+              <label class="post-run">Pace</label>
+              <select name="pace">
+                <option value="military">Military (> 6 min/mile)</option>
+                <option value="military">Advanced (6-7 min/mile)</option>
+                <option value="military">High Intermediate (7-8 min/mile)</option>
+                <option value="military">Intermediate (8-9 min/mile)</option>
+                <option value="military">High Beginner (9-10 min/mile)</option>
+                <option value="military">Beginner (10-11 min/mile)</option>
+              </select>
+            </div>
+            <div class="input-container">
+              <label class="post-run">Age</label>
+              <select name="age_pref">
+                <option value="16-17">16-17</option>
+                <option value="18-22">18-22</option>
+                <option value="23-29">23-29</option>
+                <option value="30-39">30-39</option>
+                <option value="40-49">40-49</option>
+                <option value="50-59">50-59</option>
+                <option value="60-69">60-69</option>
+                <option value="70+">70+</option>
+              </select>
+            </div>
+            <div class="input-container">
+              <label class="post-run">Describe yourself in one sentence</label>
+                <input type="text" name="description" placeholder="Hobbies, talents, interests..." class="email text-input">
+            </div>
+
+        <a class="sign-in button" href="#22">CREATE PROFILE</a>
+
+        </form>
+
+
+
+      </div><!-- end of post-run-module -->
+
+    </div>
+
+</div> <!-- end main-container -->

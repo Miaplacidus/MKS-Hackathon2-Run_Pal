@@ -1,24 +1,17 @@
-<!-- <h1>Welcome to RunningBuddy - Find someone to run with</h1> -->
+<video class="rocky-video" loop autoplay preload='auto'>
+  <source src="http://sarmadbokhari.com/rocky.mp4" type="video/mp4" />
+</video>
 
-<h1>Welcome to RunningBuddy</h1>
-<h3>Running alone is boring...</h3>
-  <h3>find someone to run with in your city</h3>
+  <div class="signin sign-in-home"> <!-- ACCOUNT (RIGHT-CONTAINER) -->
+    <h1 class="titular">Welcome to RunningBuddy
+    <p>Running alone is boring... <br>Find someone to run with in your city</p>
+    <div class="input-container">
+        <input type="text" placeholder="yourname@gmail.com" class="email text-input">
+        <div class="input-icon envelope-icon-acount"><span class="fontawesome-envelope scnd-font-color"></span></div>
+    </div>
 
-<div class="login-wrap">
-  <h2>Login</h2>
-  <div class="form">
-    <input type="text" placeholder="Username" name="un" />
-    <input type="password" placeholder="Password" name="pw" />
-    <button> Sign in </button>
-    <a href="#"> <p> Don't have an account? Register </p></a>
-  </div>
-</div>
+      <a class="fb-sign-in" href="/auth/facebook" target="_blank">
+          <span class="fb-border"><span class="icon zocial-facebook"></span></span>Sign in with Facebook
+      </a>
 
-<script>
-  $(function() {
-      var BV = new $.BigVideo();
-      BV.init();
-      BV.show('http://sarmadbokhari.com/rocky.mp4');
-  });
-</script>
-
+  </div><!-- end account block -->
