@@ -7,12 +7,16 @@ require 'time'
 
 module RunPal
   def self.db
-    @db_class ||= Database::PostgresDB
-    @__db_instance ||= @db_class.new
+    @db_class ||= Database::InMemory
+    @__db_instance ||= @db_class.new(@env || 'test')
   end
 
   def self.db_class=(db_class)
     @db_class = db_class
+  end
+
+  def self.env=(env_name)
+    @env = env_name
   end
 
   def self.db_seed

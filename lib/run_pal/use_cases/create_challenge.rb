@@ -16,7 +16,7 @@ module RunPal
       inputs[:recipient_id] = inputs[:recipient_id].to_i
       inputs[:creator_id] = inputs[:creator_id].to_i
       inputs[:pace] = inputs[:pace].to_i
-      inputs[:complete]
+      inputs[:complete] = inputs[:complete]
 
       challenge = create_new_challenge(inputs)
       return failure(:invalid_inputs) if !challenge.valid?

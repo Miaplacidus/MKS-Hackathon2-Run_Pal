@@ -9,9 +9,3 @@ test:
   database: runpal_test
   pool: 5
   timeout: 5000
-
-production:
-  adapter: postgresql
-  database: runpal_prod
-  encoding: unicode
-  host: localhost

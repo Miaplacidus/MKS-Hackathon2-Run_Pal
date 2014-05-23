@@ -2,9 +2,9 @@ module RunPal
   module Database
     class PostgresDB
 
-       def initialize
+       def initialize(env)
         ActiveRecord::Base.establish_connection(
-          YAML.load_file("db/config.yml")["test"]
+          YAML.load_file("db/config.yml")[env]
         )
       end
 
