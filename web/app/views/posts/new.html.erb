@@ -16,7 +16,8 @@
         <h2 class="titular"><span class="icon entypo-location"></span><strong>Post a Run</strong></h2>
         <br>
 
-        <form action="new" method="POST">
+        <form action="/posts" method="POST">
+          <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
             <div class="input-container">
                 <label class="post-run">Date</label>
                 <input type="date" name="date" placeholder="Date" class="email text-input">
@@ -70,9 +71,7 @@
                 <input type="text" name="max_runners" placeholder="Max Runners" class="password text-input">
             </div>
 
-        <button type='submit' class="sign-in button">
-         POST RUN
-        </button>
+        <button type='submit' class="sign-in button">POST RUN</button>
 
 
 

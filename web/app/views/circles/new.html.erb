@@ -15,10 +15,11 @@
 
         <h2 class="titular"><span class="icon entypo-location"></span><strong>Post a Run</strong></h2>
         <br>
-        <form action="#" method="#">
+        <form action="/circles" method="POST">
+            <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
             <div class="input-container">
                 <label class="post-run">Name</label>
-                <input type="text" name="circle_name" placeholder="Circle name" class="email text-input">
+                <input type="text" name="name" placeholder="Circle name" class="email text-input">
             </div>
             <div class="input-container">
                 <label class="post-run">Description</label>
@@ -30,10 +31,10 @@
             </div>
             <div class="input-container">
                 <label class="post-run">Email</label>
-                <input type="email" name="group_user_email" placeholder="User email" class="email text-input">
+                <input type="email" name="group_member_email" placeholder="User email" class="email text-input">
             </div>
 
-            <a class="sign-in button" href="#22">Create group</a>
+            <button type="submit" class="sign-in button">Create group</button>
 
         </form>
 
