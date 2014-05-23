@@ -6,4 +6,10 @@ class PostsController < ApplicationController
   def new
 
   end
+
+  def create
+    params = request.request_parameters
+    RunPal::CreatePost.run(params)
+  end
+
 end
