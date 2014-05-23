@@ -227,6 +227,23 @@ label {
     text-decoration: none;
   }
 
+button.sign-in {
+  background: #cc324b;
+  border: 0;
+  border-radius: 5px;
+  color: #fff;
+  display: block;
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 50px;
+  margin: 0 auto;
+  text-align: center;
+  width: 175px;
+  -webkit-transition: background .3s;
+  transition: background .3s;
+}
+
 .arrow-btn-container {
   position: relative;
 }
@@ -1255,11 +1272,16 @@ label {
     text-align: right;
 }
 
-video{
-  margin: 0 auto;
-  width: 100%;
+.bigvid{
+  position: absolute;
   height: 100%;
-  padding: 0;
-  position: relative;
-  z-index: 0
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  margin-top: -30px;
+  margin-left: -10px
+}
+
+video{
+  height: 65em;
 }

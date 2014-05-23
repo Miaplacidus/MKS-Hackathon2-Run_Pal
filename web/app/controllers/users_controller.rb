@@ -1,5 +1,10 @@
 class UsersController < ApplicationController
   def new
-    @user = current_user
+
+  end
+
+  def create
+    params = request.request_parameters
+    RunPal::CreateUser.run(params)
   end
 end
