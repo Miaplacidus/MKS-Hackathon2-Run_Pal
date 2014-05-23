@@ -152,19 +152,12 @@ module RunPal
       end
 
       def create_circle(attrs)
-        # Member IDS are passed in an array
-
-        # members = attrs[:member_ids]
-        # attrs.delete(:member_ids)
-
-        # members.each do |uid|
-        #   CircleUsers.create(circle_id: ar_circle.id, user_id: uid )
-        # end
 
         ar_circle = Circle.create(attrs)
+        CircleUsers.create(circle_id: ar_circle.id, user_id: ar_circle.admin_id)
 
         attrs_w_members = ar_circle.attributes
-        attrs_w_members[:member_ids] = []
+        attrs_w_members[:member_ids] = [ar_circle.admin_id]
 
         RunPal::Circle.new(attrs_w_members)
       end
@@ -255,7 +248,9 @@ module RunPal
       def add_user_to_circle(id, user_id)
         ar_circle_user = CircleUsers.create({circle_id: id, user_id: user_id})
         circle_user = CircleUsers.where("circle_id = ? AND user_id = ?", id, user_id).first
+
         ar_user = User.where(id: circle_user.user_id).first
+
         RunPal::User.new(ar_user.attributes)
       end
 
