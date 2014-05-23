@@ -1272,11 +1272,16 @@ label {
     text-align: right;
 }
 
-video{
-  margin: 0 auto;
-  width: 100%;
+.bigvid{
+  position: absolute;
   height: 100%;
-  padding: 0;
-  position: relative;
-  z-index: 0
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  margin-top: -30px;
+  margin-left: -10px
+}
+
+video{
+  height: 65em;
 }
