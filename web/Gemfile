@@ -2,7 +2,12 @@ source 'https://rubygems.org'
 app_gemfile_path = File.expand_path('../../Gemfile', __FILE__)
 eval File.read(app_gemfile_path)
 
+gem 'mapbox-rails'
 
+group :development do
+  gem "better_errors"
+  gem "binding_of_caller"
+end
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.1'
 # Use SCSS for stylesheets

@@ -25,6 +25,7 @@ module RunPal
     end
 
     def create_new_post(attrs)
+      binding.pry
       RunPal.db.create_post(attrs)
     end
 
