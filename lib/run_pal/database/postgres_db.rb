@@ -396,8 +396,40 @@ module RunPal
         RunPal::User.new(ar_user.attributes)
       end
 
+      def create_from_omniauth(auth)
+        User.where(fbid: auth.uid).first_or_initialize.tap do |user|
+          # user.provider = auth.provider
+          user.fbid = auth.uid
+          user.username = auth.info.first_name
+          user.oauth_token = auth.credentials.token
+          user.oauth_expires_at = Time.at(auth.credentials.expires_at)
+          user.img = auth.info.image
+
+          fb_gender = auth.extra.raw_info.gender
+
+          if fb_gender == 'female'
+            user.gender = 1
+          elsif fb_gender == 'male'
+            user.gender = 2
+          else
+            user.gender = 0
+          end
+
+          user.save!
+        end
+
+        ar_user = User.where(fbid: auth.slice(:uid)).first
+        RunPal::User.new(ar_user.attributes)
+      end
+
       def get_user(id)
         ar_user = User.where(id: id).first
+        return nil if !ar_user
+        RunPal::User.new(ar_user.attributes)
+      end
+
+      def get_user_by_fbid(fbid)
+        ar_user = User.where(fbid: fbid).first
         return nil if !ar_user
         RunPal::User.new(ar_user.attributes)
       end
@@ -450,6 +482,22 @@ module RunPal
         ar_wallet = Wallet.where(user_id: user_id).first.delete
       end
 
+      def create_session(attrs)
+        sid = SecureRandom.uuid
+        ar_session = Session.create({session_key: sid, user_id: attrs[:user_id]})
+        session = RunPal::Session.new(id: ar_session.id, session_key: ar_session.session_key, user_id: ar_session.user_id)
+      end
+
+      def get_session(key)
+        ar_session = Session.where(session_key: key).first
+        return nil if ar_session == nil
+        session = RunPal::Session.new(ar_session.attributes)
+      end
+
+      def delete_session(key)
+        ar_session = Session.where(session_key: key)
+        Session.destroy(ar_session.id) if get_session(key)
+      end
 
     end
   end
