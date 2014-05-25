@@ -1,0 +1,18 @@
+/home/vagrant/.rbenv/versions/2.1.1/bin/ruby extconf.rb 
+creating Makefile
+
+make "DESTDIR=" clean
+make: Warning: File `Makefile' has modification time 0.57 s in the future
+make: warning:  Clock skew detected.  Your build may be incomplete.
+
+make "DESTDIR="
+make: Warning: File `Makefile' has modification time 0.57 s in the future
+compiling debug_inspector.c
+linking shared-object debug_inspector.so
+make: warning:  Clock skew detected.  Your build may be incomplete.
+
+make "DESTDIR=" install
+make: Warning: File `Makefile' has modification time 0.24 s in the future
+/usr/bin//install -c -m 0755 debug_inspector.so ./.gem.20140523-7856-qfdbuq
+installing default debug_inspector libraries
+make: warning:  Clock skew detected.  Your build may be incomplete.
