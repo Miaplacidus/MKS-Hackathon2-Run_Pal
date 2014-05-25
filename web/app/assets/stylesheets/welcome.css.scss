@@ -1285,3 +1285,23 @@ label {
 video{
   height: 65em;
 }
+
+footer{
+  display: block;
+  color: white;
+  margin: 0 auto;
+  clear: both;
+  text-align: center;
+  padding-top: 20px;
+}
+
+footer ul{
+  margin: 0 auto;
+  clear: both;
+}
+
+footer li{
+  display: inline;
+  white-space: nowrap;
+  padding:0 10px;
+}
