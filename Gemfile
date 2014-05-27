@@ -2,14 +2,14 @@ source 'https://rubygems.org'
 # ruby '2.0.0'
 
 # for testing purposes
-ruby '2.1.1'
+# ruby '2.1.1'
 
 # Core Application
 gem 'activemodel', '~> 4.1'
 
 # Testing
 gem 'rspec', '~> 2.14.1'
-gem 'pry-debugger', '~> 0.2.2'
+# gem 'pry-debugger', '~> 0.2.2'
 gem 'timecop', '~> 0.7.1'
 
 gem 'pg'
