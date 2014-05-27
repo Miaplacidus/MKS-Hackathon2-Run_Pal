@@ -453,7 +453,7 @@ button.sign-in {
             background: #e64c65;
           }
       .donut-chart-block {
-        height: 434px;
+        height: 400px;
       }
         .donut-chart-block .titular {
           padding: 10px 0;
@@ -466,7 +466,7 @@ button.sign-in {
             position: relative;
             width: 200px;
             height: 200px;
-            margin: 0 auto 2rem;
+            margin: 0 auto;
             border-radius: 100%
            }
           p.center-date {
@@ -791,6 +791,10 @@ button.sign-in {
               border-bottom-right-radius: 5px;
             }
     /************************************************** MIDDLE CONTAINER **********************************/
+
+    .profile-options .views a p {
+      line-height: 10px;
+    }
 
     /*SIGN IN*/
     .sign-in-home {
