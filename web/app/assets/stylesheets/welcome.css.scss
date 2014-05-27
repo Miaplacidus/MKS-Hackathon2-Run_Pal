@@ -313,7 +313,7 @@ button.sign-in {
   font-family: 'Ubuntu', sans-serif;
   width: 950px;
   height: 1725px;
-  margin: 6em auto;
+  margin: 2em auto;
 }
   /*********************************************** HEADER ***********************************************/
   header {
@@ -1309,4 +1309,8 @@ footer li{
   display: inline;
   white-space: nowrap;
   padding:0 10px;
+}
+
+.logo{
+  margin: 2em auto;
 }
