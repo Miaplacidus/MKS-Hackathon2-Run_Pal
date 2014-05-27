@@ -312,7 +312,6 @@ button.sign-in {
 .main-container {
   font-family: 'Ubuntu', sans-serif;
   width: 950px;
-  height: 1725px;
   margin: 2em auto;
 }
   /*********************************************** HEADER ***********************************************/
@@ -809,7 +808,7 @@ button.sign-in {
     }
 
     .signin {
-        height: 193px;
+        height: 220px;
         position: absolute;
         top: 20em;
         right: 10em;
@@ -963,6 +962,7 @@ button.sign-in {
 
       .circle-title .titular {
           background: #cc324b;
+          width: 625px;
         }
           .circle-title .titular .icon {
             padding-right: 15px;
@@ -1288,13 +1288,13 @@ label {
 }
 
 video{
-  height: 65em;
+  height: 61em;
 }
 
 footer{
   display: block;
   color: white;
-  margin: 0 auto;
+  margin: 1em auto;
   clear: both;
   text-align: center;
   padding-top: 20px;
@@ -1313,4 +1313,8 @@ footer li{
 
 .logo{
   margin: 2em auto;
+}
+
+.logo_icon{
+  padding-top: 10px;
 }
