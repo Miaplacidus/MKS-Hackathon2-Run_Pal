@@ -3,8 +3,10 @@ module RunPal
     class PostgresDB
 
        def initialize(env)
+        config_path = File.join(File.dirname(__FILE__), '../../../db/config.yml')
+
         ActiveRecord::Base.establish_connection(
-          YAML.load_file("db/config.yml")[env]
+          YAML.load_file(config_path)[env]
         )
       end
 
